@@ -1,0 +1,2 @@
+DB_USER = 'SIMV'
+DB_PASSWORD = 'TAcuato+-14'
