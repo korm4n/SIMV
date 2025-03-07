@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFormLayout, QHBoxLayout, QLabel, QLineEdit, QComboBox, QDateEdit, QSpacerItem, QSizePolicy
 from PySide6.QtGui import QIntValidator, QRegularExpressionValidator
 from PySide6.QtCore import QRegularExpression
+from utils import calculate_age  # Importar la función desde utils.py
 
 class ConsultaGeneral(QWidget):
     def __init__(self, parent):
@@ -97,5 +98,5 @@ class ConsultaGeneral(QWidget):
 
     def update_age_paciente(self):
         birthdate = self.birthdate_entry_paciente.date().toPyDate()
-        age = self.parent.calculate_age(birthdate)
+        age = calculate_age(birthdate)
         self.age_label_paciente.setText(str(age))

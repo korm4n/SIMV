@@ -1,14 +1,9 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton
+from PySide6.QtGui import QIcon
 from consultas_medicas.consulta_general import ConsultaGeneral
 from consultas_medicas.consulta_pediatrica import ConsultaPediatrica
 from consultas_medicas.consulta_ginecologica import ConsultaGinecologica
 from consultas_medicas.emergencia import Emergencia
-from datetime import date
-
-def calculate_age(birthdate):
-    today = date.today()
-    age = today.year - birthdate.year - ((today.month, today.day) < (birthdate.month, birthdate.day))
-    return age
 
 class Pacientes(QWidget):
     def __init__(self):
@@ -17,11 +12,18 @@ class Pacientes(QWidget):
         self.main_layout = QVBoxLayout()
         self.setLayout(self.main_layout)
 
-        # Crear botones
+        # Crear botones con iconos
         self.consulta_general_button = QPushButton("Consulta General")
+        self.consulta_general_button.setIcon(QIcon("iconos/medicopaciente.png"))
+
         self.consulta_pediatrica_button = QPushButton("Consulta Pediátrica")
+        self.consulta_pediatrica_button.setIcon(QIcon("iconos/pediatria.png"))
+
         self.consulta_ginecologica_button = QPushButton("Consulta Ginecológica")
+        self.consulta_ginecologica_button.setIcon(QIcon("iconos/ginecologia.png"))
+
         self.emergencia_button = QPushButton("Emergencia")
+        self.emergencia_button.setIcon(QIcon("iconos/emergencia.png"))
 
         # Conectar botones a sus acciones
         self.consulta_general_button.clicked.connect(self.show_consulta_general)
@@ -67,6 +69,3 @@ class Pacientes(QWidget):
             child = layout.takeAt(0)
             if child.widget():
                 child.widget().deleteLater()
-
-    def calculate_age(self, birthdate):
-        return calculate_age(birthdate)
