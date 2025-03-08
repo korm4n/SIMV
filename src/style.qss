@@ -1,0 +1,79 @@
+QMainWindow {
+    background-color: #F0F0F0; /* Fondo de la ventana */
+    color: #000000; /* Color del texto en la ventana */
+}
+
+QMainWindow::title {
+    background-color: #D0D0D0; /* Color del marco de la ventana */
+    color: rgb(53, 99, 205);
+    font-size: 16px;
+    padding: 5px;
+}
+
+/* Estilo para QFrame */
+QFrame {
+    background-color: #534d75; /* Fondo de los frames */
+    color: #000000; /* Color del texto en los frames */
+    /* border: 1px solid gray;  Borde de los frames */
+    /* border-radius: 5px;  Bordes redondeados */
+}
+
+/* Estilo para QPushButton */
+QPushButton {
+    background-color: rgba(92, 88, 103, 0.103); /* Fondo de los botones */
+    /* border: 1px solid blue;  Borde de los botones */
+    /* border-radius: 5px;  Bordes redondeados */
+    padding: 10px; /* Relleno de los botones */
+    color: #000000; /* Color del texto en los botones */
+}
+
+QPushButton:hover {
+    background-color: lightblue; /* Fondo al pasar el mouse */
+    color: black; /* Color del texto al pasar el mouse */
+}
+
+QPushButton:checked {
+    background-color: rgb(48, 43, 43); /* Fondo cuando está seleccionado */
+    color: black; /* Color del texto cuando está seleccionado */
+}
+
+/* Estilo para QLineEdit */
+QLineEdit {
+    /* border: 1px solid gray;  Borde de los cuadros de texto */
+    /* border-radius: 5px;  Bordes redondeados */
+    padding: 5px; /* Relleno de los cuadros de texto */
+    background-color: rgb(255, 255, 255); /* Fondo de los cuadros de texto */
+    color: #000000; /* Color del texto en los cuadros de texto */
+}
+
+QLineEdit:focus {
+    border: 1px solid blue;  /* Borde al enfocar */
+}
+
+/* Estilo para QLabel */
+QLabel {
+    font-size: 14px; /* Tamaño de fuente */
+    color: rgb(49, 61, 120); /* Color del texto */
+}
+
+QLabel#hospitalName {
+    color: blue; /* Color del texto del nombre del hospital */
+}
+
+/* Estilo para QListWidget */
+QListWidget {
+    background-color: rgb(255, 255, 255); /* Fondo de las listas */
+    color: #000000; /* Color del texto en las listas */
+}
+
+/* Estilo para QTableWidget */
+QTableWidget {
+    background-color: rgb(255, 255, 255); /* Fondo de las tablas */
+    color: #000000; /* Color del texto en las tablas */
+}
+
+/* Estilo para QWidget */
+QWidget {
+    background-color: #F0F0F0; /* Fondo de todos los widgets */
+    color: #000000; /* Color del texto en los widgets */
+}

@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFormLayout, QHBoxLayout, QLabel, QLineEdit, QComboBox, QDateEdit, QSpacerItem, QSizePolicy
-from PySide6.QtGui import QIntValidator, QRegularExpressionValidator
-from PySide6.QtCore import QRegularExpression
+from PySide6.QtGui import QIntValidator, QRegularExpressionValidator, QIcon
+from PySide6.QtCore import QRegularExpression, QSize, Qt
 from utils import calculate_age  # Importar la función desde utils.py
 
 class ConsultaGeneral(QWidget):
@@ -12,8 +12,11 @@ class ConsultaGeneral(QWidget):
 
         # Crear botón de "Atrás"
         self.back_button = QPushButton("Atrás")
+        self.back_button.setIcon(QIcon("ruta/a/tu/imagen.png"))  # Establecer la imagen del botón
+        self.back_button.setIconSize(QSize(24, 24))  # Ajustar el tamaño de la imagen
+        self.back_button.setFixedSize(100, 40)  # Ajustar el tamaño del botón
         self.back_button.clicked.connect(self.go_back)
-        layout.addWidget(self.back_button)
+        layout.addWidget(self.back_button, alignment=Qt.AlignLeft)  # Ajustar la ubicación del botón
 
         # Crear el formulario de paciente
         form_layout = QFormLayout()
@@ -97,6 +100,6 @@ class ConsultaGeneral(QWidget):
         self.parent.show_main_menu()
 
     def update_age_paciente(self):
-        birthdate = self.birthdate_entry_paciente.date().toPyDate()
+        birthdate = self.birthdate_entry_paciente.date().toPython()
         age = calculate_age(birthdate)
         self.age_label_paciente.setText(str(age))

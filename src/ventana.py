@@ -1,6 +1,6 @@
-from PySide6.QtWidgets import QApplication, QWidget, QLabel, QVBoxLayout, QStatusBar, QHBoxLayout, QMainWindow, QMenuBar, QMenu, QPushButton, QWidgetAction, QMessageBox, QFrame, QStackedWidget, QSizePolicy
+from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QVBoxLayout, QHBoxLayout, QWidget, QStatusBar, QMenu, QPushButton, QWidgetAction, QMessageBox, QStackedWidget, QSizePolicy
 from PySide6.QtCore import QTimer, Qt, QPoint, QSize
-from PySide6.QtGui import QIcon, QAction
+from PySide6.QtGui import QIcon
 from servicios import CreateConnection
 import sys
 from datetime import datetime
@@ -15,9 +15,18 @@ from frames.configuracion import Configuracion
 class Ventana(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowIcon(QIcon("C:\\Users\\kervinfb\\OneDrive\\Documents\\Sistema de Informacion Medica\\sistema-informacion-medica\\src\\iconos\\SIMV.png"))  # Cambia "ruta/al/icono.png" por la ruta real de tu ícono
+        self.setWindowIcon(QIcon("C:\\Users\\kervinfb\\OneDrive\\Documents\\Sistema de Informacion Medica\\sistema-informacion-medica\\src\\iconos\\SIMV.png"))
         self.initUI()
         self.initTimer()
+        self.setStyleSheet(self.load_stylesheet())
+
+    def load_stylesheet(self):
+        with open("c:\\Users\\kervinfb\\OneDrive\\Documents\\Sistema de Informacion Medica\\sistema-informacion-medica\\src\\style.qss", "r") as file:
+            return file.read()
+
+    def get_stylesheet(self):
+        with open("style.qss", "r") as file:
+            return file.read()
 
     def initUI(self):
         self.setWindowTitle("Resultado de la Conexión")
@@ -53,12 +62,16 @@ class Ventana(QMainWindow):
 
         # Crear un espacio antes del ícono de hamburguesa
         espacio_antes_hamburguesa = QLabel()
-        espacio_antes_hamburguesa.setFixedWidth(1)  # Ajusta el ancho del espacio según sea necesario
+        espacio_antes_hamburguesa.setFixedWidth(3)  # Ajusta el ancho del espacio a 3 píxeles
         self.menu_bar.setCornerWidget(espacio_antes_hamburguesa, Qt.TopLeftCorner)
 
         # Agregar el ícono de hamburguesa a la barra de menú izquierda
         self.hamburger_action = QLabel()
-        self.hamburger_action.setPixmap(QIcon("C:\\Users\\kervinfb\\OneDrive\\Documents\\Sistema de Informacion Medica\\sistema-informacion-medica\\src\\iconos\\ih2.png").pixmap(20, 30))
+        pixmap = QIcon("C:\\Users\\kervinfb\\OneDrive\\Documents\\Sistema de Informacion Medica\\sistema-informacion-medica\\src\\iconos\\ih2.png").pixmap(20, 30)
+        mask = pixmap.createMaskFromColor(Qt.transparent)
+        pixmap.fill(Qt.black)
+        pixmap.setMask(mask)
+        self.hamburger_action.setPixmap(pixmap)
         self.hamburger_action.mousePressEvent = self.mostrar_menu_hamburguesa
         self.menu_bar.setCornerWidget(self.hamburger_action, Qt.TopLeftCorner)
 
@@ -77,9 +90,6 @@ class Ventana(QMainWindow):
         self.fecha_hora_timer = QTimer(self)
         self.fecha_hora_timer.timeout.connect(self.actualizar_fecha_hora)
         self.fecha_hora_timer.start(1000)  # Actualizar cada segundo
-
-        # Establecer el fondo blanco para la ventana
-        self.setStyleSheet("background-color: black;")
 
         # Crear el menú desplegable
         self.menu_hamburguesa = QMenu(self)
@@ -112,8 +122,8 @@ class Ventana(QMainWindow):
             botones_layout.addWidget(boton)
             self.buttons[nombre] = boton
 
-        # Aplicar estilos a los botones
-        button_style = """
+        # Aplicar estilos a los botones del menú de hamburguesa
+        button_style_hamburguesa = """
             QPushButton {
                 text-align: left;
                 padding: 10px;
@@ -129,14 +139,14 @@ class Ventana(QMainWindow):
             }
             QPushButton:checked {
                 background-color: silver;  /* Color de fondo cuando está seleccionado */
-                color: white;  /* Color del texto cuando está seleccionado */
+                color: black;  /* Color del texto cuando está seleccionado */
             }
         """
 
         for key, button in self.buttons.items():
             button.setIconSize(QSize(24, 24))  # Establecer tamaño del icono
             button.setFixedHeight(40)  # Establecer altura fija para los botones
-            button.setStyleSheet(button_style)
+            button.setStyleSheet(button_style_hamburguesa)
 
         # Crear un widget para contener el layout de los botones
         botones_widget = QWidget()
@@ -162,7 +172,6 @@ class Ventana(QMainWindow):
             "Configuración": Configuracion(),
         }
         for frame in self.frames.values():
-            frame.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)  # Permitir que los frames se expandan
             self.stacked_widget.addWidget(frame)
 
         # Agregar el QStackedWidget al layout de contenido
@@ -225,7 +234,6 @@ class Ventana(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     ventana = Ventana()
-    ventana.show()  # Iniciar en pantalla completa
+    ventana.show()
     sys.exit(app.exec())
-
 

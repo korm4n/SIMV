@@ -53,6 +53,15 @@ class CreateConnection:
         except Exception:
             return "Desconectado"
 
+    def close_connection(self, connection):
+        """Close the database connection"""
+        try:
+            if connection.is_connected():
+                connection.close()
+                print("Conexión cerrada")
+        except Error as e:
+            print(f"Error al cerrar la conexión: {e}")
+
 if __name__ == '__main__':
     db = CreateConnection()
     connection = db.create_connection()

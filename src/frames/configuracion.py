@@ -1,9 +1,13 @@
-from PySide6.QtWidgets import QWidget, QLabel, QVBoxLayout, QFormLayout, QLineEdit, QPushButton, QMessageBox, QFileDialog, QColorDialog, QHBoxLayout, QFrame, QGridLayout, QSpacerItem, QSizePolicy
+from PySide6.QtWidgets import QWidget, QLabel, QVBoxLayout, QFormLayout, QLineEdit, QPushButton, QMessageBox, QFileDialog, QColorDialog, QHBoxLayout, QFrame, QGridLayout, QSpacerItem, QSizePolicy, QComboBox
 from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
 import os
+import re
 from servicios import CreateConnection
 import time
+from frames.db_config import BACKGROUND_COLOR, TITLE_COLOR, LINEEDIT_BACKGROUND_COLOR, LINEEDIT_TEXT_COLOR, TEXT_COLOR
+from frames.db_config import CLEAR_BUTTON_DISABLED
+import frames.db_config as db_config
 
 class Configuracion(QWidget):
     def __init__(self):
@@ -14,6 +18,12 @@ class Configuracion(QWidget):
         layout.addWidget(self.config_frame)
         self.setLayout(layout)
         
+        # Definir hospital_name_label_inicio
+        self.hospital_name_label_inicio = QLabel()
+        
+        self.initUI()
+        self.load_configuracion()
+
     def create_configuracion_frame(self):
         frame = QWidget()
         main_layout = QVBoxLayout(frame)
@@ -21,34 +31,39 @@ class Configuracion(QWidget):
         # Frame superior con la configuración existente
         config_layout = QFormLayout()
         
+        self.hospital_id_entry = QLineEdit()
+        self.hospital_id_entry.setStyleSheet("background-color: white; color: black;")
+        self.hospital_id_entry.setMaxLength(10)
+        self.hospital_id_entry.setFixedWidth(50)
+        self.hospital_id_entry.setReadOnly(True)  # Hacer que el campo no sea editable
+        config_layout.addRow(QLabel("ID del Hospital:"), self.hospital_id_entry)
+        
         self.hospital_name_entry = QLineEdit()
         self.hospital_name_entry.setStyleSheet("background-color: white; color: black;")
-        self.hospital_name_entry.setMaxLength(200)
-        self.hospital_name_entry.setFixedWidth(400)
+        self.hospital_name_entry.setMaxLength(255)
+        self.hospital_name_entry.setFixedWidth(350)
         config_layout.addRow(QLabel("Nombre del Hospital:"), self.hospital_name_entry)
         
         self.direccion_entry_hospital = QLineEdit()
         self.direccion_entry_hospital.setStyleSheet("background-color: white; color: black;")
-        self.direccion_entry_hospital.setMaxLength(200)
-        self.direccion_entry_hospital.setFixedWidth(400)
+        self.direccion_entry_hospital.setMaxLength(255)
+        self.direccion_entry_hospital.setFixedWidth(350)
         config_layout.addRow(QLabel("Dirección:"), self.direccion_entry_hospital)
         
         self.telefono_entry_hospital = QLineEdit()
         self.telefono_entry_hospital.setStyleSheet("background-color: white; color: black;")
-        self.telefono_entry_hospital.setMaxLength(200)
-        self.telefono_entry_hospital.setFixedWidth(400)
+        self.telefono_entry_hospital.setMaxLength(20)
+        self.telefono_entry_hospital.setFixedWidth(100)
         config_layout.addRow(QLabel("Teléfono:"), self.telefono_entry_hospital)
         
-        self.tipo_entry_hospital = QLineEdit()
-        self.tipo_entry_hospital.setStyleSheet("background-color: white; color: black;")
-        self.tipo_entry_hospital.setMaxLength(200)
-        self.tipo_entry_hospital.setFixedWidth(400)
+        self.tipo_entry_hospital = QComboBox()
+        self.tipo_entry_hospital.addItems(["I", "II", "III", "IV", "V"])
+        self.tipo_entry_hospital.setFixedWidth(50)
         config_layout.addRow(QLabel("Tipo:"), self.tipo_entry_hospital)
         
-        self.zona_entry_hospital = QLineEdit()
-        self.zona_entry_hospital.setStyleSheet("background-color: white; color: black;")
-        self.zona_entry_hospital.setMaxLength(200)
-        self.zona_entry_hospital.setFixedWidth(400)
+        self.zona_entry_hospital = QComboBox()
+        self.zona_entry_hospital.addItems(["Rural", "Urbana", "Mixta"])
+        self.zona_entry_hospital.setFixedWidth(80)
         config_layout.addRow(QLabel("Zona:"), self.zona_entry_hospital)
         
         self.save_button_configuracion = QPushButton("Guardar")
@@ -144,31 +159,98 @@ class Configuracion(QWidget):
         self.config_frame.raise_()
 
     def save_configuracion(self):
+        hospital_id = self.hospital_id_entry.text()
         nombre_hospital = self.hospital_name_entry.text()
         direccion = self.direccion_entry_hospital.text()
         telefono = self.telefono_entry_hospital.text()
         tipo = self.tipo_entry_hospital.text()
-        zona = self.zona_entry_hospital.text()
+        zona = self.zona_entry_hospital.currentText()
 
         if not nombre_hospital or not direccion or not telefono or not tipo or not zona:
             QMessageBox.warning(self, "Error", "Todos los campos son obligatorios.")
             return
 
-        # Aquí puedes agregar la lógica para guardar los datos en la base de datos
-        QMessageBox.information(self, "Guardado", "Datos del hospital guardados correctamente.")
-        
-        # Actualizar el nombre del hospital en la pantalla de inicio
-        self.update_hospital_name()
+        # Validar el formato del teléfono
+        if not re.match(r'^\d{4}-\d{7}$', telefono):
+            QMessageBox.warning(self, "Error", "El formato del teléfono debe ser 0000-0000000.")
+            return
+
+        db_connection = CreateConnection()
+        connection = None
+        try:
+            connection = db_connection.create_connection()
+            cursor = connection.cursor()
+
+            if hospital_id:
+                query = """
+                    UPDATE hospital
+                    SET nombre = %s, direccion = %s, telefono = %s, tipo = %s, zona = %s
+                    WHERE id = %s
+                """
+                cursor.execute(query, (nombre_hospital, direccion, telefono, tipo, zona, hospital_id))
+            else:
+                query = """
+                    INSERT INTO hospital (nombre, direccion, telefono, tipo, zona)
+                    VALUES (%s, %s, %s, %s, %s)
+                """
+                cursor.execute(query, (nombre_hospital, direccion, telefono, tipo, zona))
+
+            connection.commit()
+            
+            # Actualizar el nombre del hospital en la pantalla de inicio
+            self.update_hospital_name()
+            
+            # Bloquear el botón "Limpiar Información" permanentemente
+            self.clear_button_configuracion.setEnabled(False)
+            db_config.CLEAR_BUTTON_DISABLED = True
+            with open(os.path.join(os.path.dirname(__file__), 'db_config.py'), 'a') as config_file:
+                config_file.write(f"\nCLEAR_BUTTON_DISABLED = True\n")
+            
+            QMessageBox.information(self, "Guardado", "Datos del hospital guardados correctamente.")
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Error al guardar los datos: {e}")
+        finally:
+            if connection:
+                db_connection.close_connection(connection)
 
     def clear_configuracion_form(self):
         self.hospital_name_entry.clear()
         self.direccion_entry_hospital.clear()
         self.telefono_entry_hospital.clear()
         self.tipo_entry_hospital.clear()
-        self.zona_entry_hospital.clear()
+        self.zona_entry_hospital.setCurrentIndex(0)
 
     def update_hospital_name(self):
         self.hospital_name_label_inicio.setText(self.hospital_name_entry.text())
+
+    def load_configuracion(self):
+        db_connection = CreateConnection()
+        connection = None
+        try:
+            connection = db_connection.create_connection()
+            cursor = connection.cursor()
+            query = "SELECT id, nombre, direccion, telefono, tipo, zona FROM hospital LIMIT 1"
+            cursor.execute(query)
+            result = cursor.fetchone()
+            if result:
+                self.hospital_id_entry.setText(str(result[0]))
+                self.hospital_name_entry.setText(result[1])
+                self.direccion_entry_hospital.setText(result[2])
+                self.telefono_entry_hospital.setText(result[3])
+                self.tipo_entry_hospital.setCurrentText(result[4])
+                self.zona_entry_hospital.setCurrentText(result[5])
+                self.update_hospital_name()
+                
+                # Deshabilitar el botón "Guardar" si ya hay datos guardados
+                self.save_button_configuracion.setEnabled(False)
+                self.save_button_configuracion.setText("Registro realizado una única vez")
+            if CLEAR_BUTTON_DISABLED:
+                self.clear_button_configuracion.setEnabled(False)
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Error al cargar los datos: {e}")
+        finally:
+            if connection:
+                db_connection.close_connection(connection)
 
     def select_image(self):
         options = QFileDialog.Options()
@@ -239,3 +321,67 @@ class Configuracion(QWidget):
             frame = self.frames.get(frame_name)
             if frame:
                 frame.setStyleSheet(f"background-color: {color.name()};")
+
+    def initUI(self):
+        layout = QVBoxLayout()
+
+        # Botones para seleccionar colores
+        self.background_color_button = QPushButton("Seleccionar color de fondo")
+        self.background_color_button.clicked.connect(self.select_background_color)
+        layout.addWidget(self.background_color_button)
+
+        self.title_color_button = QPushButton("Seleccionar color del título")
+        self.title_color_button.clicked.connect(self.select_title_color)
+        layout.addWidget(self.title_color_button)
+
+        self.lineedit_background_color_button = QPushButton("Seleccionar color de fondo de los cuadros de texto")
+        self.lineedit_background_color_button.clicked.connect(self.select_lineedit_background_color)
+        layout.addWidget(self.lineedit_background_color_button)
+
+        self.lineedit_text_color_button = QPushButton("Seleccionar color del texto de los cuadros de texto")
+        self.lineedit_text_color_button.clicked.connect(self.select_lineedit_text_color)
+        layout.addWidget(self.lineedit_text_color_button)
+
+        self.text_color_button = QPushButton("Seleccionar color del texto")
+        self.text_color_button.clicked.connect(self.select_text_color)
+        layout.addWidget(self.text_color_button)
+
+        self.setLayout(layout)
+
+    def select_background_color(self):
+        color = QColorDialog.getColor()
+        if color.isValid():
+            global BACKGROUND_COLOR
+            BACKGROUND_COLOR = color.name()
+            self.update_stylesheet()
+
+    def select_title_color(self):
+        color = QColorDialog.getColor()
+        if color.isValid():
+            global TITLE_COLOR
+            TITLE_COLOR = color.name()
+            self.update_stylesheet()
+
+    def select_lineedit_background_color(self):
+        color = QColorDialog.getColor()
+        if color.isValid():
+            global LINEEDIT_BACKGROUND_COLOR
+            LINEEDIT_BACKGROUND_COLOR = color.name()
+            self.update_stylesheet()
+
+    def select_lineedit_text_color(self):
+        color = QColorDialog.getColor()
+        if color.isValid():
+            global LINEEDIT_TEXT_COLOR
+            LINEEDIT_TEXT_COLOR = color.name()
+            self.update_stylesheet()
+
+    def select_text_color(self):
+        color = QColorDialog.getColor()
+        if color.isValid():
+            global TEXT_COLOR
+            TEXT_COLOR = color.name()
+            self.update_stylesheet()
+
+    def update_stylesheet(self):
+        self.parent().setStyleSheet(self.parent().get_stylesheet())
