@@ -720,6 +720,47 @@ class CrearBaseDatos:
                 ) ENGINE=InnoDB
             ''')
 
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS Farmacos (
+                    numero_lote VARCHAR(50) PRIMARY KEY,
+                    nombre_medicamento VARCHAR(255) NOT NULL,
+                    fecha_vencimiento DATE NOT NULL,
+                    fecha_elaboracion DATE NOT NULL,
+                    cantidad_recibida INT NOT NULL,
+                    cantidad_usada INT NOT NULL,
+                    cantidad_devuelta INT NOT NULL,
+                    cantidad_desechada INT NOT NULL,
+                    cantidad_que_queda INT NOT NULL,
+                    concentracion VARCHAR(100) NOT NULL,
+                    forma_farmaceutica VARCHAR(100) NOT NULL,
+                    codigo_unidad_contenido VARCHAR(50) NOT NULL,
+                    capacidad_unidad_contenido VARCHAR(50) NOT NULL,
+                    via_administracion VARCHAR(100) NOT NULL,
+                    hospital_id INT,
+                    FOREIGN KEY (hospital_id) REFERENCES Hospital(id)
+                ) ENGINE=InnoDB
+            ''')
+
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS MedicoFarmaco (
+                    medico_cedula VARCHAR(20),
+                    numero_lote VARCHAR(50),
+                    PRIMARY KEY (medico_cedula, numero_lote),
+                    FOREIGN KEY (medico_cedula) REFERENCES MedicoOEnfermero(cedula),
+                    FOREIGN KEY (numero_lote) REFERENCES Farmacos(numero_lote)
+                ) ENGINE=InnoDB
+            ''')
+
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS PacienteFarmaco (
+                    paciente_cedula VARCHAR(20),
+                    numero_lote VARCHAR(50),
+                    PRIMARY KEY (paciente_cedula, numero_lote),
+                    FOREIGN KEY (paciente_cedula) REFERENCES Paciente(cedula),
+                    FOREIGN KEY (numero_lote) REFERENCES Farmacos(numero_lote)
+                ) ENGINE=InnoDB
+            ''')
+
             self.connection.commit()
             cursor.close()
             self.connection.close()

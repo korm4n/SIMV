@@ -53,7 +53,7 @@ class Ventana(QMainWindow):
         self.status_label = QLabel("", self)
         self.status_bar.addPermanentWidget(self.status_label)
         
-        self.resize(800, 600)  # Iniciar en pantalla completa
+        self.setFixedSize(1220, 620)  # Iniciar en pantalla completa
 
         self.menu_bar = self.menuBar()
 
@@ -161,6 +161,7 @@ class Ventana(QMainWindow):
             "Configuración": Configuracion(),
         }
         for frame in self.frames.values():
+            frame.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)  # Permitir que cada frame se expanda
             self.stacked_widget.addWidget(frame)
 
         # Agregar el QStackedWidget al layout de contenido
