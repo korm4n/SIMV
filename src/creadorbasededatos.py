@@ -708,6 +708,18 @@ class CrearBaseDatos:
                 ) ENGINE=InnoDB
             ''')
 
+            cursor.execute('''
+                CREATE TABLE IF NOT EXISTS Inventario (
+                    serial VARCHAR(50) PRIMARY KEY,
+                    nombre VARCHAR(255) NOT NULL,
+                    descripcion TEXT NOT NULL,
+                    fecha_incorporacion DATE NOT NULL,
+                    fecha_desincorporacion DATE,
+                    hospital_id INT,
+                    FOREIGN KEY (hospital_id) REFERENCES Hospital(id)
+                ) ENGINE=InnoDB
+            ''')
+
             self.connection.commit()
             cursor.close()
             self.connection.close()

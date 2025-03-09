@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QVBoxLayout, QHBoxLayout, QWidget, QStatusBar, QMenu, QPushButton, QWidgetAction, QMessageBox, QStackedWidget, QSizePolicy
 from PySide6.QtCore import QTimer, Qt, QPoint, QSize
-from PySide6.QtGui import QIcon
+from PySide6.QtGui import QIcon, QPixmap  # Asegúrate de que QPixmap esté importado
 from servicios import CreateConnection
 import sys
 from datetime import datetime
@@ -11,20 +11,17 @@ from frames.historial_medico import HistorialMedico
 from frames.consultas import Consultas
 from frames.farmacia import Farmacia
 from frames.configuracion import Configuracion
+from frames.inventario import Inventario
 
 class Ventana(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowIcon(QIcon("C:\\Users\\kervinfb\\OneDrive\\Documents\\Sistema de Informacion Medica\\sistema-informacion-medica\\src\\iconos\\SIMV.png"))
+        self.setWindowIcon(QIcon("iconos/SIMV.png"))
         self.initUI()
         self.initTimer()
         self.setStyleSheet(self.load_stylesheet())
 
     def load_stylesheet(self):
-        with open("c:\\Users\\kervinfb\\OneDrive\\Documents\\Sistema de Informacion Medica\\sistema-informacion-medica\\src\\style.qss", "r") as file:
-            return file.read()
-
-    def get_stylesheet(self):
         with open("style.qss", "r") as file:
             return file.read()
 
@@ -67,7 +64,7 @@ class Ventana(QMainWindow):
 
         # Agregar el ícono de hamburguesa a la barra de menú izquierda
         self.hamburger_action = QLabel()
-        pixmap = QIcon("C:\\Users\\kervinfb\\OneDrive\\Documents\\Sistema de Informacion Medica\\sistema-informacion-medica\\src\\iconos\\ih2.png").pixmap(20, 30)
+        pixmap = QIcon("iconos/ih2.png").pixmap(20, 30)
         mask = pixmap.createMaskFromColor(Qt.transparent)
         pixmap.fill(Qt.black)
         pixmap.setMask(mask)
@@ -82,7 +79,6 @@ class Ventana(QMainWindow):
 
         # Crear un QLabel para la fecha y hora
         self.fecha_hora_label = QLabel()
-        self.fecha_hora_label.setStyleSheet("font-size: 18px;")  # Incrementar el tamaño de la fuente a 24
         self.menu_bar.setCornerWidget(self.fecha_hora_label, Qt.TopRightCorner)
 
         # Actualizar la fecha y hora periódicamente
@@ -98,16 +94,34 @@ class Ventana(QMainWindow):
         botones_layout = QVBoxLayout()
         botones_layout.setAlignment(Qt.AlignTop)  # Alinear los botones en la parte superior
 
+        # Crear una circunferencia con una imagen
+        imagen_label = QLabel()
+        pixmap = QPixmap("iconos/usuario.png").scaled(50, 50, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        imagen_label.setPixmap(pixmap)
+        imagen_label.setFixedSize(50, 50)
+        imagen_label.setStyleSheet("""
+            QLabel {
+                border-radius: 25px;
+                border: 2px solid black;
+                background-color: white;
+            }
+            QLabel::pixmap {
+                border-radius: 25px;
+            }
+        """)
+        botones_layout.addWidget(imagen_label)
+
         # Crear botones y conectar sus señales
-        botones = ["Inicio", "Médicos/Enfermeras", "Pacientes", "Historial Médico", "Consultas", "Farmacia", "Configuración"]
+        botones = ["Inicio", "Médicos/Enfermeras", "Pacientes", "Historial Médico", "Consultas", "Farmacia", "Inventario", "Configuración"]
         iconos = [
-            "C:\\Users\\kervinfb\\OneDrive\\Documents\\Sistema de Informacion Medica\\sistema-informacion-medica\\src\\iconos\\inicio.png",
-            "C:\\Users\\kervinfb\\OneDrive\\Documents\\Sistema de Informacion Medica\\sistema-informacion-medica\\src\\iconos\\medicos.png",
-            "C:\\Users\\kervinfb\\OneDrive\\Documents\\Sistema de Informacion Medica\\sistema-informacion-medica\\src\\iconos\\pacientes.png",
-            "C:\\Users\\kervinfb\\OneDrive\\Documents\\Sistema de Informacion Medica\\sistema-informacion-medica\\src\\iconos\\historial.png",
-            "C:\\Users\\kervinfb\\OneDrive\\Documents\\Sistema de Informacion Medica\\sistema-informacion-medica\\src\\iconos\\consultas.png",
-            "C:\\Users\\kervinfb\\OneDrive\\Documents\\Sistema de Informacion Medica\\sistema-informacion-medica\\src\\iconos\\farmacia.png",
-            "C:\\Users\\kervinfb\\OneDrive\\Documents\\Sistema de Informacion Medica\\sistema-informacion-medica\\src\\iconos\\config.png"
+            "iconos/inicio.png",
+            "iconos/medicos.png",
+            "iconos/pacientes.png",
+            "iconos/historial.png",
+            "iconos/consultas.png",
+            "iconos/farmacia.png",
+            "iconos/inventario.png",
+            "iconos/config.png"
         ]
         self.buttons = {}
         max_width = 320
@@ -121,32 +135,6 @@ class Ventana(QMainWindow):
             boton.clicked.connect(self.actualizar_botones)  # Conectar la señal para actualizar el estado de los botones
             botones_layout.addWidget(boton)
             self.buttons[nombre] = boton
-
-        # Aplicar estilos a los botones del menú de hamburguesa
-        button_style_hamburguesa = """
-            QPushButton {
-                text-align: left;
-                padding: 10px;
-                font-size: 18px;  /* Tamaño de fuente más grande */
-                color: blue;
-                border-radius: 10px;  /* Esquinas redondeadas */
-                background-color: #f0f0f0;  /* Color de fondo */
-            }
-
-            QPushButton:hover {
-                background-color: rgb(128, 128, 128);  /* Color de fondo al pasar el mouse */
-                color: white;  /* Color del texto al pasar el mouse */
-            }
-            QPushButton:checked {
-                background-color: silver;  /* Color de fondo cuando está seleccionado */
-                color: black;  /* Color del texto cuando está seleccionado */
-            }
-        """
-
-        for key, button in self.buttons.items():
-            button.setIconSize(QSize(24, 24))  # Establecer tamaño del icono
-            button.setFixedHeight(40)  # Establecer altura fija para los botones
-            button.setStyleSheet(button_style_hamburguesa)
 
         # Crear un widget para contener el layout de los botones
         botones_widget = QWidget()
@@ -169,6 +157,7 @@ class Ventana(QMainWindow):
             "Historial Médico": HistorialMedico(),
             "Consultas": Consultas(),
             "Farmacia": Farmacia(),
+            "Inventario": Inventario(),  # Agregar el frame Inventario
             "Configuración": Configuracion(),
         }
         for frame in self.frames.values():

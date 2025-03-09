@@ -1,5 +1,5 @@
 QMainWindow {
-    background-color: #F0F0F0; /* Fondo de la ventana */
+    background-color: #ffffff; /* Fondo de la ventana */
     color: #000000; /* Color del texto en la ventana */
 }
 
@@ -18,31 +18,32 @@ QFrame {
     /* border-radius: 5px;  Bordes redondeados */
 }
 
-/* Estilo para QPushButton */
+/* Estilos para los botones del menú de hamburguesa */
 QPushButton {
-    background-color: rgba(92, 88, 103, 0.103); /* Fondo de los botones */
-    /* border: 1px solid blue;  Borde de los botones */
-    /* border-radius: 5px;  Bordes redondeados */
-    padding: 10px; /* Relleno de los botones */
-    color: #000000; /* Color del texto en los botones */
+    text-align: left;
+    padding: 10px;
+    font-size: 10px;  /* Tamaño de fuente más grande */
+    color: black;
+    border-radius: 10px;  /* Esquinas redondeadas */
+    background-color: #d3d3d3;  /* Color de fondo */
 }
 
 QPushButton:hover {
-    background-color: lightblue; /* Fondo al pasar el mouse */
-    color: black; /* Color del texto al pasar el mouse */
+    background-color: #87CEEB;  /* Color de fondo al pasar el mouse */
+    color: black;  /* Color del texto al pasar el mouse */
 }
 
 QPushButton:checked {
-    background-color: rgb(48, 43, 43); /* Fondo cuando está seleccionado */
-    color: black; /* Color del texto cuando está seleccionado */
+    background-color: silver;  /* Color de fondo cuando está seleccionado */
+    color: black;  /* Color del texto cuando está seleccionado */
 }
 
 /* Estilo para QLineEdit */
 QLineEdit {
-    /* border: 1px solid gray;  Borde de los cuadros de texto */
-    /* border-radius: 5px;  Bordes redondeados */
+    border: 1px solid gray;  /* Borde de los cuadros de texto */
+    border-radius: 5px;  /* Bordes redondeados */
     padding: 5px; /* Relleno de los cuadros de texto */
-    background-color: rgb(255, 255, 255); /* Fondo de los cuadros de texto */
+    background-color: #ffffff; /* Fondo de los cuadros de texto */
     color: #000000; /* Color del texto en los cuadros de texto */
 }
 
@@ -54,6 +55,7 @@ QLineEdit:focus {
 QLabel {
     font-size: 14px; /* Tamaño de fuente */
     color: rgb(49, 61, 120); /* Color del texto */
+    background-color: #ffffff; /* Color de fondo de las etiquetas */
 }
 
 QLabel#hospitalName {
@@ -76,4 +78,15 @@ QTableWidget {
 QWidget {
     background-color: #F0F0F0; /* Fondo de todos los widgets */
     color: #000000; /* Color del texto en los widgets */
+}
+
+/* Estilos para todos los botones */
+QPushButton {
+    background-color: #d3d3d3; /* Fondo gris */
+    color: black; /* Texto negro */
+}
+
+QPushButton:hover {
+    background-color: black; /* Fondo negro al pasar el mouse */
+    color: white; /* Texto blanco al pasar el mouse */
 }
