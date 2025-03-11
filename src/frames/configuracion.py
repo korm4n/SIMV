@@ -1,16 +1,14 @@
-from PySide6.QtWidgets import QWidget, QLabel, QVBoxLayout, QFormLayout, QLineEdit, QPushButton, QMessageBox, QFileDialog, QColorDialog, QHBoxLayout, QFrame, QGridLayout, QSpacerItem, QSizePolicy, QComboBox
-from PySide6.QtGui import QPixmap
+from PySide6.QtWidgets import QWidget, QLabel, QVBoxLayout, QFormLayout, QLineEdit, QPushButton, QMessageBox, QComboBox, QSpacerItem, QSizePolicy, QHBoxLayout, QFileDialog
+from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtCore import Qt
 import os
 import re
 from servicios import CreateConnection
-import time
 import frames.db_config as db_config
 
 class Configuracion(QWidget):
     def __init__(self):
         super().__init__()
-        self.frames = {}  # Inicializar el diccionario de frames
         self.config_frame = self.create_configuracion_frame()  # Crear el frame de configuración
         layout = QVBoxLayout()
         layout.addWidget(self.config_frame)
@@ -31,7 +29,7 @@ class Configuracion(QWidget):
         
         self.hospital_id_entry = QLineEdit()
         self.hospital_id_entry.setMaxLength(10)
-        self.hospital_id_entry.setFixedWidth(50)
+        self.hospital_id_entry.setFixedWidth(80)
         self.hospital_id_entry.setReadOnly(True)  # Hacer que el campo no sea editable
         config_layout.addRow(QLabel("ID del Hospital:"), self.hospital_id_entry)
         
@@ -62,15 +60,60 @@ class Configuracion(QWidget):
         self.zona_entry_hospital.setFixedWidth(80)
         config_layout.addRow(QLabel("Zona:"), self.zona_entry_hospital)
         
-        self.save_button_configuracion = QPushButton("Guardar")
-        self.save_button_configuracion.setFixedSize(150, 30)  # Establecer tamaño fijo
-        self.save_button_configuracion.clicked.connect(self.save_configuracion)
-        config_layout.addRow(self.save_button_configuracion)
+        # Cuadro de vista previa de imagen
+        self.image_preview_label = QLabel()
+        self.image_preview_label.setFixedSize(100, 100)
+        self.image_preview_label.setStyleSheet("border: 1px solid black;")
+        config_layout.addRow(QLabel("Vista previa de la imagen:"), self.image_preview_label)
         
-        self.clear_button_configuracion = QPushButton("Limpiar Información")
-        self.clear_button_configuracion.setFixedSize(150, 30)  # Establecer tamaño fijo
+        # Botón para seleccionar imagen
+        self.select_image_button = QPushButton("Seleccionar Imagen")
+        self.select_image_button.setFixedSize(150, 30)
+        self.select_image_button.clicked.connect(self.select_image)
+        config_layout.addRow(self.select_image_button)
+        
+        self.save_button_configuracion = QPushButton("Guardar")
+        self.save_button_configuracion.setIcon(QIcon("iconos/guardar.png"))  # Añadir icono
+        self.save_button_configuracion.setFixedSize(100, 30)  # Establecer tamaño fijo
+        self.save_button_configuracion.clicked.connect(self.save_configuracion)
+        
+        self.clear_button_configuracion = QPushButton("Limpiar")
+        self.clear_button_configuracion.setIcon(QIcon("iconos/limpiar.png"))  # Añadir icono
+        self.clear_button_configuracion.setFixedSize(100, 30)  # Establecer tamaño fijo
         self.clear_button_configuracion.clicked.connect(self.clear_configuracion_form)
-        config_layout.addRow(self.clear_button_configuracion)
+        
+        # Botones Guardar y Limpiar en la misma fila
+        button_layout = QHBoxLayout()
+        button_layout.addWidget(self.save_button_configuracion)
+        button_layout.addWidget(self.clear_button_configuracion)
+        config_layout.addRow(button_layout)
+        
+        # Añadir espaciadores para separar los botones de las credenciales de conexión
+        for _ in range(3):
+            spacer = QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding)
+            config_layout.addItem(spacer)
+        
+        # Campos para credenciales de la base de datos
+        db_config_title = QLabel("<b>Credenciales de Conexión</b>")
+        db_config_title.setAlignment(Qt.AlignLeft)  # Centrar el título
+        config_layout.addRow(db_config_title)
+        
+        self.db_user_entry = QLineEdit()
+        self.db_user_entry.setMaxLength(200)
+        self.db_user_entry.setFixedWidth(200)
+        config_layout.addRow(QLabel("Usuario:"), self.db_user_entry)
+        
+        self.db_password_entry = QLineEdit()
+        self.db_password_entry.setMaxLength(200)
+        self.db_password_entry.setFixedWidth(200)
+        self.db_password_entry.setEchoMode(QLineEdit.Password)
+        config_layout.addRow(QLabel("Contraseña:"), self.db_password_entry)
+        
+        self.create_db_button = QPushButton("Guardar")
+        self.create_db_button.setIcon(QIcon("iconos/guardar.png"))  # Añadir icono
+        self.create_db_button.setFixedSize(100, 30)  # Establecer tamaño fijo
+        self.create_db_button.clicked.connect(self.create_database)
+        config_layout.addRow(self.create_db_button)
         
         main_layout.addLayout(config_layout)
         
@@ -78,49 +121,7 @@ class Configuracion(QWidget):
         spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
         main_layout.addItem(spacer)
         
-        # Frame inferior con dos subframes
-        bottom_frame = QFrame()
-        bottom_layout = QHBoxLayout(bottom_frame)
-        
-        # Subframe para la configuración de la base de datos
-        db_config_frame = QFrame()
-        db_config_layout = QFormLayout(db_config_frame)
-        
-        # Agregar el título "Credenciales de Conexión"
-        db_config_title = QLabel("<b>Credenciales de Conexión</b>")
-        db_config_title.setAlignment(Qt.AlignCenter)  # Centrar el título
-        db_config_layout.addRow(db_config_title)
-        
-        self.db_user_entry = QLineEdit()
-        self.db_user_entry.setMaxLength(200)
-        self.db_user_entry.setFixedWidth(200)  # Reducir el ancho a la mitad
-        db_config_layout.addRow(QLabel("Usuario:"), self.db_user_entry)
-        
-        self.db_password_entry = QLineEdit()
-        self.db_password_entry.setMaxLength(200)
-        self.db_password_entry.setFixedWidth(200)  # Reducir el ancho a la mitad
-        self.db_password_entry.setEchoMode(QLineEdit.Password)
-        db_config_layout.addRow(QLabel("Contraseña:"), self.db_password_entry)
-        
-        # Centrar el botón "Guardar"
-        self.create_db_button = QPushButton("Guardar")
-        self.create_db_button.setFixedSize(150, 30)
-        self.create_db_button.clicked.connect(self.create_database)
-        button_layout = QHBoxLayout()
-        button_layout.addStretch()
-        button_layout.addWidget(self.create_db_button)
-        button_layout.addStretch()
-        db_config_layout.addRow(button_layout)
-        
-        bottom_layout.addWidget(db_config_frame)
-        
-        main_layout.addWidget(bottom_frame)
-        
         frame.setLayout(main_layout)
-        
-        # Agregar los frames al diccionario self.frames
-        self.frames["informacion del hospital"] = frame
-        self.frames["credenciales"] = db_config_frame
         
         return frame
 
@@ -128,12 +129,20 @@ class Configuracion(QWidget):
         self.config_frame.show()
         self.config_frame.raise_()
 
+    def select_image(self):
+        file_dialog = QFileDialog()
+        file_path, _ = file_dialog.getOpenFileName(self, "Seleccionar Imagen", "", "Images (*.png *.jpg *.jpeg)")
+        if file_path:
+            self.selected_image_path = file_path
+            pixmap = QPixmap(file_path)
+            self.image_preview_label.setPixmap(pixmap.scaled(self.image_preview_label.size(), Qt.KeepAspectRatio))
+
     def save_configuracion(self):
         hospital_id = self.hospital_id_entry.text()
         nombre_hospital = self.hospital_name_entry.text()
         direccion = self.direccion_entry_hospital.text()
         telefono = self.telefono_entry_hospital.text()
-        tipo = self.tipo_entry_hospital.currentText()  # Cambiado a currentText()
+        tipo = self.tipo_entry_hospital.currentText()
         zona = self.zona_entry_hospital.currentText()
 
         if not nombre_hospital or not direccion or not telefono or not tipo or not zona:
@@ -167,6 +176,15 @@ class Configuracion(QWidget):
 
             connection.commit()
             
+            # Guardar la imagen seleccionada
+            if hasattr(self, 'selected_image_path'):
+                image_folder = os.path.join(os.path.dirname(__file__), '..', 'imagen')
+                os.makedirs(image_folder, exist_ok=True)
+                image_name = f"{hospital_id or cursor.lastrowid}.png"
+                image_path = os.path.join(image_folder, image_name)
+                pixmap = QPixmap(self.selected_image_path)
+                pixmap.save(image_path)
+
             # Actualizar el nombre del hospital en la pantalla de inicio
             self.update_hospital_name()
             
@@ -232,12 +250,6 @@ class Configuracion(QWidget):
             if connection:
                 db_connection.close_connection(connection)
 
-    def select_image(self):
-        options = QFileDialog.Options()
-        file_name, _ = QFileDialog.getOpenFileName(self, "Seleccionar Imagen", "", "Images (*.png *.xpm *.jpg *.jpeg *.bmp);;All Files (*)", options=options)
-        if file_name:
-            self.image_label_inicio.setPixmap(QPixmap(file_name).scaled(self.image_label_inicio.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation))
-
     def create_database(self):
         db_user = self.db_user_entry.text()
         db_password = self.db_password_entry.text()
@@ -253,20 +265,6 @@ class Configuracion(QWidget):
             config_file.write(f"DB_PASSWORD = '{db_password}'\n")
 
         QMessageBox.information(self, "Almacenado", "Credenciales guardadas correctamente.")
-
-        # Intentar realizar la conexión a la base de datos
-        db_connection = CreateConnection()
-        connection = db_connection.create_connection()
-        attempts = 0
-        while not connection or not connection.is_connected():
-            if attempts >= 3:  # Limitar el número de intentos a 3
-                QMessageBox.warning(self, "Error de Conexión", "No se pudo conectar a la base de datos después de varios intentos. Verifique las credenciales e intente nuevamente.")
-                return
-            time.sleep(5)  # Esperar 5 segundos antes de reintentar
-            connection = db_connection.create_connection()
-            attempts += 1
-
-        QMessageBox.information(self, "Conexión Exitosa", "Conexión a la base de datos realizada correctamente.")
 
     def initUI(self):
         layout = QVBoxLayout()

@@ -54,7 +54,7 @@ class CrearBaseDatos:
                     direccion VARCHAR(255) NOT NULL,
                     genero ENUM('Masculino', 'Femenino', 'Otros') NOT NULL,
                     estado_civil ENUM('Soltero', 'Casado', 'Viudo', 'Divorciado') NOT NULL,
-                    numero_registro_medico VARCHAR(50) NOT NULL,
+                    numero_registro_medico VARCHAR(20) NOT NULL,
                     horario_guardia TEXT NOT NULL,
                     hospital_id INT,
                     FOREIGN KEY (hospital_id) REFERENCES Hospital(id)
@@ -73,11 +73,11 @@ class CrearBaseDatos:
                     genero ENUM('Masculino', 'Femenino') NOT NULL,
                     estado_civil ENUM('Soltero', 'Casado', 'Viudo', 'Divorciado') NOT NULL,
                     direccion VARCHAR(255) NOT NULL,
-                    nacionalidad VARCHAR(50) NOT NULL,
+                    nacionalidad VARCHAR(20) NOT NULL,
                     profesion_ocupacion VARCHAR(100) NOT NULL,
-                    religion VARCHAR(50) NOT NULL,
+                    religion VARCHAR(20) NOT NULL,
                     contacto_emergencia VARCHAR(255) NOT NULL,
-                    parentesco VARCHAR(50) NOT NULL,
+                    parentesco VARCHAR(20) NOT NULL,
                     temperatura DECIMAL(5, 2) NOT NULL,
                     pulso INT NOT NULL,
                     respiracion INT NOT NULL,
@@ -710,11 +710,12 @@ class CrearBaseDatos:
 
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS Inventario (
-                    serial VARCHAR(50) PRIMARY KEY,
+                    serial VARCHAR(20) PRIMARY KEY,
                     nombre VARCHAR(255) NOT NULL,
                     descripcion TEXT NOT NULL,
                     fecha_incorporacion DATE NOT NULL,
                     fecha_desincorporacion DATE,
+                    motivo_desincorporacion TEXT,       
                     hospital_id INT,
                     FOREIGN KEY (hospital_id) REFERENCES Hospital(id)
                 ) ENGINE=InnoDB
@@ -722,7 +723,8 @@ class CrearBaseDatos:
 
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS Farmacos (
-                    numero_lote VARCHAR(50) PRIMARY KEY,
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    numero_lote VARCHAR(20) NOT NULL,
                     nombre_medicamento VARCHAR(255) NOT NULL,
                     fecha_vencimiento DATE NOT NULL,
                     fecha_elaboracion DATE NOT NULL,
@@ -730,12 +732,12 @@ class CrearBaseDatos:
                     cantidad_usada INT NOT NULL,
                     cantidad_devuelta INT NOT NULL,
                     cantidad_desechada INT NOT NULL,
-                    cantidad_que_queda INT NOT NULL,
-                    concentracion VARCHAR(100) NOT NULL,
-                    forma_farmaceutica VARCHAR(100) NOT NULL,
-                    codigo_unidad_contenido VARCHAR(50) NOT NULL,
-                    capacidad_unidad_contenido VARCHAR(50) NOT NULL,
-                    via_administracion VARCHAR(100) NOT NULL,
+                    cantidad_disponible INT NOT NULL,
+                    concentracion VARCHAR(20) NOT NULL,
+                    forma_farmaceutica VARCHAR(50) NOT NULL,
+                    codigo_unidad_contenido VARCHAR(20) NOT NULL,
+                    capacidad_unidad_contenido VARCHAR(20) NOT NULL,
+                    via_administracion VARCHAR(20) NOT NULL,
                     hospital_id INT,
                     FOREIGN KEY (hospital_id) REFERENCES Hospital(id)
                 ) ENGINE=InnoDB
@@ -744,20 +746,20 @@ class CrearBaseDatos:
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS MedicoFarmaco (
                     medico_cedula VARCHAR(20),
-                    numero_lote VARCHAR(50),
-                    PRIMARY KEY (medico_cedula, numero_lote),
+                    farmaco_id INT,
+                    PRIMARY KEY (medico_cedula, farmaco_id),
                     FOREIGN KEY (medico_cedula) REFERENCES MedicoOEnfermero(cedula),
-                    FOREIGN KEY (numero_lote) REFERENCES Farmacos(numero_lote)
+                    FOREIGN KEY (farmaco_id) REFERENCES Farmacos(id)
                 ) ENGINE=InnoDB
             ''')
 
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS PacienteFarmaco (
                     paciente_cedula VARCHAR(20),
-                    numero_lote VARCHAR(50),
-                    PRIMARY KEY (paciente_cedula, numero_lote),
+                    farmaco_id INT,
+                    PRIMARY KEY (paciente_cedula, farmaco_id),
                     FOREIGN KEY (paciente_cedula) REFERENCES Paciente(cedula),
-                    FOREIGN KEY (numero_lote) REFERENCES Farmacos(numero_lote)
+                    FOREIGN KEY (farmaco_id) REFERENCES Farmacos(id)
                 ) ENGINE=InnoDB
             ''')
 

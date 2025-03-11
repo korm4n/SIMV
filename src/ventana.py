@@ -128,7 +128,9 @@ class Ventana(QMainWindow):
 
         for nombre, icono in zip(botones, iconos):
             boton = QPushButton(nombre)
-            boton.setIcon(QIcon(icono))  # Establecer el icono del botón
+            boton_icon = QIcon(icono)
+            boton.setIcon(boton_icon)  # Establecer el icono del botón
+            boton.setIconSize(QSize(20, 20))  # Ajustar el tamaño del icono a 40x40 píxeles
             boton.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)  # Permitir que el ancho se ajuste al contenido
             boton.setCheckable(True)  # Hacer el botón checkable
             boton.clicked.connect(lambda checked, n=nombre: self.cambiar_frame(n.replace("<br>", " ")))

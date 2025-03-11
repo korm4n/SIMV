@@ -22,7 +22,7 @@ QFrame {
 QPushButton {
     text-align: left;
     padding: 10px;
-    font-size: 10px;  /* Tamaño de fuente más grande */
+    font-size: 12px;  /* Tamaño de fuente más grande */
     color: black;
     border-radius: 10px;  /* Esquinas redondeadas */
     background-color: #d3d3d3;  /* Color de fondo */
