@@ -196,7 +196,7 @@ class Ventana(QMainWindow):
 
     def actualizar_fecha_hora(self):
         now = datetime.now()
-        self.fecha_hora_label.setText(now.strftime("%Y-%m-%d %H:%M:%S  "))
+        self.fecha_hora_label.setText(now.strftime("%d-%m-%Y %H:%M:%S  "))
 
     def actualizar_botones(self):
         for boton in self.buttons.values():

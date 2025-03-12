@@ -166,9 +166,10 @@ class MedicosEnfermeras(QWidget):
 
         form_layout.addRow(row_layout2)
 
-        # Agrupar dirección en una fila
+        # Agrupar dirección y especialidad en una fila
         row_layout3 = QHBoxLayout()
         row_layout3.setAlignment(Qt.AlignLeft)  # Alinear a la izquierda
+
         self.direccion_entry = QLineEdit()
         self.direccion_entry.setValidator(QRegularExpressionValidator(QRegularExpression(".{1,255}")))
         self.direccion_entry.setMaxLength(255)
@@ -176,6 +177,16 @@ class MedicosEnfermeras(QWidget):
         self.direccion_entry.setStyleSheet("background-color: white;")
         row_layout3.addWidget(QLabel("Dirección:"))
         row_layout3.addWidget(self.direccion_entry)
+
+        self.especialidad_entry = QLineEdit()
+        self.especialidad_entry.setValidator(QRegularExpressionValidator(QRegularExpression(".{1,255}")))
+        self.especialidad_entry.setMaxLength(255)
+        self.especialidad_entry.setFixedWidth(160)
+        self.especialidad_entry.setStyleSheet("background-color: white;")
+        self.especialidad_entry.textChanged.connect(self.convert_to_uppercase)  # Conectar al evento textChanged
+        row_layout3.addWidget(QLabel("Especialidad:"))
+        row_layout3.addWidget(self.especialidad_entry)
+
         row_layout3.addSpacerItem(QSpacerItem(800, 0, QSizePolicy.Minimum, QSizePolicy.Minimum))  # Añadir espacio
 
         form_layout.addRow(row_layout3)
@@ -187,7 +198,7 @@ class MedicosEnfermeras(QWidget):
         row_layout4 = QHBoxLayout()  # Alinear al centro
         self.horario_guardia_table = QTableWidget(7, 24)
         self.horario_guardia_table.setFixedSize(1200, 450) 
-        self.horario_guardia_table.setHorizontalHeaderLabels([f"{i}:00" for i in range(24)])
+        self.horario_guardia_table.setHorizontalHeaderLabels([f"{i:02d}:00" for i in range(24)])
         self.horario_guardia_table.setVerticalHeaderLabels(["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"])
         self.horario_guardia_table.horizontalHeader().setDefaultSectionSize(40)
         self.horario_guardia_table.verticalHeader().setDefaultSectionSize(35)
@@ -258,9 +269,10 @@ class MedicosEnfermeras(QWidget):
         birthdate = self.birthdate_entry.date().toPython()
         telefono = self.telefono_entry.text()
         direccion = self.direccion_entry.text()
+        especialidad = self.especialidad_entry.text() if self.especialidad_entry.text() else None
         genero = self.genero_combobox.currentText()
         estado_civil = self.estado_civil_combobox.currentText()
-        numero_registro_medico = self.numero_registro_medico_entry.text()
+        numero_registro_medico = self.numero_registro_medico_entry.text() if tipo == "Medico" else None
         horario_guardia = self.get_selected_hours()
 
         if not cedula:
@@ -281,8 +293,8 @@ class MedicosEnfermeras(QWidget):
         if not direccion:
             QMessageBox.warning(self, "Error", "El campo 'Dirección' es obligatorio.")
             return
-        if not numero_registro_medico:
-            QMessageBox.warning(self, "Error", "El campo 'Registro MPPPS' es obligatorio.")
+        if tipo == "Medico" and not numero_registro_medico:
+            QMessageBox.warning(self, "Error", "El campo 'Registro MPPPS' es obligatorio para médicos.")
             return
         if not horario_guardia:
             QMessageBox.warning(self, "Error", "El campo 'Horario de Guardia' es obligatorio.")
@@ -307,17 +319,17 @@ class MedicosEnfermeras(QWidget):
                 # Actualizar los datos existentes
                 query = """
                 UPDATE medicooenfermero
-                SET tipo = %s, primer_nombre = %s, segundo_nombre = %s, primer_apellido = %s, segundo_apellido = %s, fecha_nacimiento = %s, telefono = %s, direccion = %s, genero = %s, estado_civil = %s, numero_registro_medico = %s, horario_guardia = %s
+                SET tipo = %s, primer_nombre = %s, segundo_nombre = %s, primer_apellido = %s, segundo_apellido = %s, fecha_nacimiento = %s, telefono = %s, direccion = %s, especialidad = %s, genero = %s, estado_civil = %s, numero_registro_medico = %s, horario_guardia = %s
                 WHERE cedula = %s
                 """
-                cursor.execute(query, (tipo, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, birthdate, telefono, direccion, genero, estado_civil, numero_registro_medico, horario_guardia_texto, cedula))
+                cursor.execute(query, (tipo, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, birthdate, telefono, direccion, especialidad, genero, estado_civil, numero_registro_medico, horario_guardia_texto, cedula))
             else:
                 # Insertar nuevos datos
                 query = """
-                INSERT INTO medicooenfermero (tipo, cedula, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, fecha_nacimiento, telefono, direccion, genero, estado_civil, numero_registro_medico, horario_guardia)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                INSERT INTO medicooenfermero (tipo, cedula, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, fecha_nacimiento, telefono, direccion, especialidad, genero, estado_civil, numero_registro_medico, horario_guardia)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """
-                cursor.execute(query, (tipo, cedula, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, birthdate, telefono, direccion, genero, estado_civil, numero_registro_medico, horario_guardia_texto))
+                cursor.execute(query, (tipo, cedula, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, birthdate, telefono, direccion, especialidad, genero, estado_civil, numero_registro_medico, horario_guardia_texto))
             connection.commit()
             QMessageBox.information(self, "Guardado", "Datos guardados correctamente.")
         except Error as e:
@@ -342,6 +354,7 @@ class MedicosEnfermeras(QWidget):
         self.genero_combobox.setCurrentIndex(0)
         self.estado_civil_combobox.setCurrentIndex(0)
         self.numero_registro_medico_entry.clear()
+        self.especialidad_entry.clear()  # Añadir esta línea para limpiar el campo especialidad
         self.horario_guardia_table.clearSelection()
 
     def convert_to_uppercase(self, text):
@@ -371,11 +384,11 @@ class MedicosEnfermeras(QWidget):
             if horas:
                 primera_hora = min(horas)
                 ultima_hora = max(horas)
-                horario_guardia_texto += f"{dia}: {primera_hora}:00 - {ultima_hora}:00; "
+                horario_guardia_texto += f"{dia}: {primera_hora:02d}:00 - {ultima_hora:02d}:00; "
 
         return horario_guardia_texto.strip("; ")
 
-    def insertar_datos(self, tipo, cedula, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, birthdate, telefono, direccion, genero, estado_civil, numero_registro_medico, horario_guardia):
+    def insertar_datos(self, tipo, cedula, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, birthdate, telefono, direccion, genero, estado_civil, numero_registro_medico, horario_guardia, especialidad=None):
         db = CreateConnection()
         connection = db.create_connection()
         if connection is None:
@@ -385,10 +398,10 @@ class MedicosEnfermeras(QWidget):
         try:
             cursor = connection.cursor()
             query = """
-            INSERT INTO medicooenfermero (tipo, cedula, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, fecha_nacimiento, telefono, direccion, genero, estado_civil, numero_registro_medico, horario_guardia)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO medicooenfermero (tipo, cedula, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, fecha_nacimiento, telefono, direccion, genero, estado_civil, numero_registro_medico, horario_guardia, especialidad)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             """
-            cursor.execute(query, (tipo, cedula, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, birthdate, telefono, direccion, genero, estado_civil, numero_registro_medico, horario_guardia))
+            cursor.execute(query, (tipo, cedula, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, birthdate, telefono, direccion, genero, estado_civil, numero_registro_medico, horario_guardia, especialidad))
             connection.commit()
             print("Datos insertados correctamente")
         except Error as e:
@@ -413,28 +426,45 @@ class MedicosEnfermeras(QWidget):
             cursor.execute(query, (cedula,))
             result = cursor.fetchone()
             if result:
-                self.cargar_datos(result)
-            else:
-                QMessageBox.information(self, "Información", "Cédula no encontrada.")
+                self.cargar_datos()
+            # No hacer nada si no se encuentra la cédula
         except Error as e:
             QMessageBox.critical(self, "Error", f"Error al verificar cédula: {e}")
         finally:
             db.close_connection(connection)
 
-    def cargar_datos(self, datos):
-        self.tipo_combobox.setCurrentText(datos[0])
-        self.cedula_entry.setText(datos[1])
-        self.primer_nombre_entry.setText(datos[2])
-        self.segundo_nombre_entry.setText(datos[3])
-        self.primer_apellido_entry.setText(datos[4])
-        self.segundo_apellido_entry.setText(datos[5])
-        self.birthdate_entry.setDate(QDate.fromString(datos[6], "yyyy-MM-dd"))
-        self.telefono_entry.setText(datos[7])
-        self.direccion_entry.setText(datos[8])
-        self.genero_combobox.setCurrentText(datos[9])
-        self.estado_civil_combobox.setCurrentText(datos[10])
-        self.numero_registro_medico_entry.setText(datos[11])
-        self.cargar_horario_guardia(datos[12])
+    def cargar_datos(self):
+        db = CreateConnection()
+        connection = db.create_connection()
+        if connection is None:
+            QMessageBox.critical(self, "Error", "No se pudo establecer la conexión con la base de datos")
+            return
+
+        try:
+            cursor = connection.cursor()
+            cursor.execute("SELECT tipo, cedula, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, fecha_nacimiento, telefono, direccion, especialidad, genero, estado_civil, numero_registro_medico, horario_guardia FROM medicooenfermero WHERE cedula = %s", (self.cedula_entry.text(),))
+            datos = cursor.fetchone()
+            if datos:
+                self.tipo_combobox.setCurrentText(datos[0])
+                self.cedula_entry.setText(datos[1])
+                self.primer_nombre_entry.setText(datos[2])
+                self.segundo_nombre_entry.setText(datos[3])
+                self.primer_apellido_entry.setText(datos[4])
+                self.segundo_apellido_entry.setText(datos[5])
+                self.birthdate_entry.setDate(QDate.fromString(datos[6].strftime("%Y-%m-%d"), "yyyy-MM-dd"))
+                self.telefono_entry.setText(datos[7])
+                self.direccion_entry.setText(datos[8])
+                self.especialidad_entry.setText(datos[9])
+                self.genero_combobox.setCurrentText(datos[10])
+                self.estado_civil_combobox.setCurrentText(datos[11])
+                self.numero_registro_medico_entry.setText(datos[12])
+                self.cargar_horario_guardia(datos[13])
+            else:
+                QMessageBox.information(self, "Información", "Cédula no encontrada.")
+        except Error as e:
+            QMessageBox.critical(self, "Error", f"No se pudieron cargar los datos: {e}")
+        finally:
+            db.close_connection(connection)
 
     def cargar_horario_guardia(self, horario_guardia_texto):
         self.horario_guardia_table.clearSelection()

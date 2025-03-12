@@ -54,7 +54,8 @@ class CrearBaseDatos:
                     direccion VARCHAR(255) NOT NULL,
                     genero ENUM('Masculino', 'Femenino', 'Otros') NOT NULL,
                     estado_civil ENUM('Soltero', 'Casado', 'Viudo', 'Divorciado') NOT NULL,
-                    numero_registro_medico VARCHAR(20) NOT NULL,
+                    numero_registro_medico VARCHAR(20),
+                    especialidad VARCHAR(50),
                     horario_guardia TEXT NOT NULL,
                     hospital_id INT,
                     FOREIGN KEY (hospital_id) REFERENCES Hospital(id)
