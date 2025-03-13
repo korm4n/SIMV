@@ -60,18 +60,32 @@ class Configuracion(QWidget):
         self.zona_entry_hospital.setFixedWidth(80)
         config_layout.addRow(QLabel("Zona:"), self.zona_entry_hospital)
         
-        # Cuadro de vista previa de imagen
+        # Cuadro de vista previa de imagen y botón en un QVBoxLayout
+        image_layout = QVBoxLayout()
+        image_layout.setAlignment(Qt.AlignCenter)  # Centrar el contenido
         self.image_preview_label = QLabel()
         self.image_preview_label.setFixedSize(100, 100)
         self.image_preview_label.setStyleSheet("border: 1px solid black;")
-        config_layout.addRow(QLabel("Vista previa de la imagen:"), self.image_preview_label)
+        image_layout.addWidget(self.image_preview_label)
         
-        # Botón para seleccionar imagen
-        self.select_image_button = QPushButton("Seleccionar Imagen")
-        self.select_image_button.setFixedSize(150, 30)
+        self.select_image_button = QPushButton("Seleccione Imagen")
+        self.select_image_button.setFixedSize(120, 30)
         self.select_image_button.clicked.connect(self.select_image)
-        config_layout.addRow(self.select_image_button)
+        image_layout.addWidget(self.select_image_button)
         
+        # Crear un QHBoxLayout para contener config_layout e image_layout
+        top_layout = QHBoxLayout()
+        top_layout.addLayout(config_layout)
+        top_layout.addStretch()  # Añadir un espaciador flexible
+        top_layout.addLayout(image_layout)
+        
+        # Añadir un espaciador fijo de 200 píxeles a la derecha del image_layout
+        spacer = QSpacerItem(500, 20, QSizePolicy.Fixed, QSizePolicy.Minimum)
+        top_layout.addItem(spacer)
+        
+        # Añadir el QHBoxLayout al main_layout
+        main_layout.addLayout(top_layout)
+              
         self.save_button_configuracion = QPushButton("Guardar")
         self.save_button_configuracion.setIcon(QIcon("iconos/guardar.png"))  # Añadir icono
         self.save_button_configuracion.setFixedSize(100, 30)  # Establecer tamaño fijo
@@ -86,36 +100,40 @@ class Configuracion(QWidget):
         button_layout = QHBoxLayout()
         button_layout.addWidget(self.save_button_configuracion)
         button_layout.addWidget(self.clear_button_configuracion)
-        config_layout.addRow(button_layout)
+
+        # Añadir un espaciador para empujar los botones hacia la izquierda
+        button_layout.addStretch()
+
+        main_layout.addLayout(button_layout)
         
         # Añadir espaciadores para separar los botones de las credenciales de conexión
         for _ in range(3):
             spacer = QSpacerItem(20, 20, QSizePolicy.Minimum, QSizePolicy.Expanding)
-            config_layout.addItem(spacer)
+            main_layout.addItem(spacer)
         
         # Campos para credenciales de la base de datos
         db_config_title = QLabel("<b>Credenciales de Conexión</b>")
         db_config_title.setAlignment(Qt.AlignLeft)  # Centrar el título
-        config_layout.addRow(db_config_title)
+        main_layout.addWidget(db_config_title)
         
         self.db_user_entry = QLineEdit()
         self.db_user_entry.setMaxLength(200)
         self.db_user_entry.setFixedWidth(200)
-        config_layout.addRow(QLabel("Usuario:"), self.db_user_entry)
+        main_layout.addWidget(QLabel("Usuario:"))
+        main_layout.addWidget(self.db_user_entry)
         
         self.db_password_entry = QLineEdit()
         self.db_password_entry.setMaxLength(200)
         self.db_password_entry.setFixedWidth(200)
         self.db_password_entry.setEchoMode(QLineEdit.Password)
-        config_layout.addRow(QLabel("Contraseña:"), self.db_password_entry)
+        main_layout.addWidget(QLabel("Contraseña:"))
+        main_layout.addWidget(self.db_password_entry)
         
         self.create_db_button = QPushButton("Guardar")
         self.create_db_button.setIcon(QIcon("iconos/guardar.png"))  # Añadir icono
         self.create_db_button.setFixedSize(100, 30)  # Establecer tamaño fijo
         self.create_db_button.clicked.connect(self.create_database)
-        config_layout.addRow(self.create_db_button)
-        
-        main_layout.addLayout(config_layout)
+        main_layout.addWidget(self.create_db_button)
         
         # Añadir un espaciador para ocupar el espacio restante
         spacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -178,10 +196,9 @@ class Configuracion(QWidget):
             
             # Guardar la imagen seleccionada
             if hasattr(self, 'selected_image_path'):
-                image_folder = os.path.join(os.path.dirname(__file__), '..', 'imagen')
+                image_folder = os.path.join(os.path.dirname(__file__), '..', '..', 'imagen')
                 os.makedirs(image_folder, exist_ok=True)
-                image_name = f"{hospital_id or cursor.lastrowid}.png"
-                image_path = os.path.join(image_folder, image_name)
+                image_path = os.path.join(image_folder, 'hospital1.png')
                 pixmap = QPixmap(self.selected_image_path)
                 pixmap.save(image_path)
 
