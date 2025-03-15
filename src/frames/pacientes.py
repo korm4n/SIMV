@@ -16,23 +16,23 @@ class Pacientes(QWidget):
         # Crear botones con iconos
         self.consulta_general_button = QPushButton("Consulta General")
         self.consulta_general_button.setIcon(QIcon("C:\\Users\\kervinfb\\OneDrive\\Documents\\Sistema de Informacion Medica\\sistema-informacion-medica\\src\\iconos\\medicopaciente.png"))
-        self.consulta_general_button.setFixedSize(200, 50)  # Establecer tamaño del botón
-        self.consulta_general_button.setIconSize(QSize(32, 32))  # Establecer tamaño del icono
+        self.consulta_general_button.setFixedSize(200, 80)  # Establecer tamaño del botón
+        self.consulta_general_button.setIconSize(QSize(80, 80))  # Establecer tamaño del icono
 
-        self.consulta_pediatrica_button = QPushButton("Consulta Pediátrica")
+        self.consulta_pediatrica_button = QPushButton("Pediatría")
         self.consulta_pediatrica_button.setIcon(QIcon("C:\\Users\\kervinfb\\OneDrive\\Documents\\Sistema de Informacion Medica\\sistema-informacion-medica\\src\\iconos\\pediatria.png"))
-        self.consulta_pediatrica_button.setFixedSize(200, 50)  # Establecer tamaño del botón
-        self.consulta_pediatrica_button.setIconSize(QSize(32, 32))  # Establecer tamaño del icono
+        self.consulta_pediatrica_button.setFixedSize(200, 80)  # Establecer tamaño del botón
+        self.consulta_pediatrica_button.setIconSize(QSize(70, 70))  # Establecer tamaño del icono
 
-        self.consulta_ginecologica_button = QPushButton("Consulta Ginecológica")
+        self.consulta_ginecologica_button = QPushButton("Ginecología")
         self.consulta_ginecologica_button.setIcon(QIcon("C:\\Users\\kervinfb\\OneDrive\\Documents\\Sistema de Informacion Medica\\sistema-informacion-medica\\src\\iconos\\ginecologia.png"))
-        self.consulta_ginecologica_button.setFixedSize(200, 50)  # Establecer tamaño del botón
-        self.consulta_ginecologica_button.setIconSize(QSize(32, 32))  # Establecer tamaño del icono
+        self.consulta_ginecologica_button.setFixedSize(200, 80)  # Establecer tamaño del botón
+        self.consulta_ginecologica_button.setIconSize(QSize(80, 80))  # Establecer tamaño del icono
 
         self.emergencia_button = QPushButton("Emergencia")
         self.emergencia_button.setIcon(QIcon("iconos\\emergencia.png"))
-        self.emergencia_button.setFixedSize(200, 50)  # Establecer tamaño del botón
-        self.emergencia_button.setIconSize(QSize(32, 32))  # Establecer tamaño del icono
+        self.emergencia_button.setFixedSize(200, 80)  # Establecer tamaño del botón
+        self.emergencia_button.setIconSize(QSize(70, 70))  # Establecer tamaño del icono
 
         # Conectar botones a sus acciones
         self.consulta_general_button.clicked.connect(self.show_consulta_general)
