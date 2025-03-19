@@ -63,13 +63,14 @@ class CrearBaseDatos:
             ''')
 
             cursor.execute('''
-                CREATE TABLE IF NOT EXISTS Paciente (
+                CREATE TABLE IF NOT EXISTS Pacientes (
                     cedula VARCHAR(20) PRIMARY KEY,
                     primer_nombre VARCHAR(255) NOT NULL,
                     segundo_nombre VARCHAR(255),
                     primer_apellido VARCHAR(255) NOT NULL,
                     segundo_apellido VARCHAR(255),
                     fecha_nacimiento DATE NOT NULL,
+                    telefono VARCHAR(20) NOT NULL,
                     lugar_nacimiento VARCHAR(255) NOT NULL,
                     genero ENUM('Masculino', 'Femenino') NOT NULL,
                     estado_civil ENUM('Soltero', 'Casado', 'Viudo', 'Divorciado') NOT NULL,
@@ -78,13 +79,13 @@ class CrearBaseDatos:
                     profesion_ocupacion VARCHAR(100) NOT NULL,
                     religion VARCHAR(20) NOT NULL,
                     nombre_apellido_emergencia VARCHAR(255) NOT NULL,
-                    telefono_emergencia INT NOT NULL,
-                    parentesco VARCHAR(20) NOT NULL,
+                    telefono_emergencia TEXT NOT NULL,
+                    parentesco VARCHAR(20) NOT NULL
                 ) ENGINE=InnoDB
             ''')
 
             cursor.execute('''
-                CREATE TABLE IF NOT EXISTS HistoriaClinicaPersonal (
+                CREATE TABLE IF NOT EXISTS Historia_Clinica_Personal (
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     paciente_cedula VARCHAR(20),
                     temperatura DECIMAL(5, 2),
@@ -107,9 +108,9 @@ class CrearBaseDatos:
                     fecha_alta DATE,
                     hora_alta TIME,
                     adenitis TEXT,
-                    alergia TEXT,
+                    alergia_p TEXT,
                     amigdalitis TEXT,
-                    artritis TEXT,
+                    artritis_p TEXT,
                     asma TEXT,
                     Bilharziasis TEXT,
                     blenorragia TEXT,
@@ -129,14 +130,14 @@ class CrearBaseDatos:
                     paludismo TEXT,
                     parasitos TEXT,
                     parotiditis TEXT,
-                    pleuresía TEXT,
+                    pleuresia TEXT,
                     quirurgicos TEXT,
                     rinolangititis TEXT,
                     rubeola TEXT,
                     sarampion TEXT,
-                    sifilis TEXT,
+                    sifilis_p TEXT,
                     sindrome_disentericos TEXT,
-                    tuberculosis TEXT,
+                    tuberculosis_p TEXT,
                     tifoidea TEXT,
                     traumatismos TEXT,
                     vacunaciones TEXT,
@@ -164,7 +165,7 @@ class CrearBaseDatos:
                     siesta TEXT,
                     sueño TEXT,
                     tabaco TEXT,
-                    otros_3_12 TEXT,
+                    otros_3_10 TEXT,
                     aumento_de_peso TEXT,
                     fiebre TEXT,
                     nutricion TEXT,
@@ -172,12 +173,12 @@ class CrearBaseDatos:
                     sudores_nocturnos TEXT,
                     temblores TEXT,
                     otros_4_7 TEXT,
-                    FOREIGN KEY (paciente_cedula) REFERENCES Paciente(cedula)
+                    FOREIGN KEY (paciente_cedula) REFERENCES Pacientes(cedula)
                 ) ENGINE=InnoDB
             ''')
 
             cursor.execute('''
-                CREATE TABLE IF NOT EXISTS HistoriaClinicaPersonal1 (
+                CREATE TABLE IF NOT EXISTS Historia_Clinica_Personal1 (
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     paciente_cedula VARCHAR(20),     
                     color TEXT,
@@ -196,7 +197,7 @@ class CrearBaseDatos:
                     fistulas TEXT,
                     ulceras TEXT,
                     otros_1_16 TEXT,
-                    configuracion,
+                    configuracion TEXT,
                     fontanelas TEXT,
                     reblandecimiento TEXT,
                     circunferencia TEXT,
@@ -272,7 +273,7 @@ class CrearBaseDatos:
                     fremito TEXT,
                     percusion TEXT,
                     auscultacion TEXT,
-                    ruidos_adventicios,
+                    ruidos_adventicios TEXT,
                     pectoriloquia_afona TEXT,
                     broncofonia TEXT,
                     otros_12_7 TEXT,
@@ -284,22 +285,22 @@ class CrearBaseDatos:
                     galopes TEXT,
                     frotes TEXT,
                     otros_13_8 TEXT,
-                    FOREIGN KEY (paciente_cedula) REFERENCES Paciente(cedula)
+                    FOREIGN KEY (paciente_cedula) REFERENCES Pacientes(cedula)
                 ) ENGINE=InnoDB
             ''')
                                          
             cursor.execute('''
-                CREATE TABLE IF NOT EXISTS HistoriaClinicaPersonal2 (
+                CREATE TABLE IF NOT EXISTS Historia_Clinica_Personal2 (
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     paciente_cedula VARCHAR(20),               
-                    pulso TEXT,
+                    pulso_h TEXT,
                     paredes_vasculares TEXT,
                     caracteres TEXT,
                     otros_14_4 TEXT,
                     aspecto TEXT,
                     circunferencia_abdomen TEXT,
                     peristalsis TEXT,
-                    cicatrices_abdomen,
+                    cicatrices_abdomen TEXT,
                     defensa TEXT,
                     sensibilidad_abdomen TEXT,
                     contracturas TEXT,
@@ -363,7 +364,7 @@ class CrearBaseDatos:
                     lenguaje TEXT,
                     coordinacion TEXT,
                     otros_21_11 TEXT,
-                    FOREIGN KEY (paciente_cedula) REFERENCES Paciente(cedula)
+                    FOREIGN KEY (paciente_cedula) REFERENCES Pacientes(cedula)
                 ) ENGINE=InnoDB
             ''')
 
@@ -515,7 +516,7 @@ class CrearBaseDatos:
                     ESPECULO TEXT,
                     EXTREMIDADES TEXT,
                     NEUROLÓGICO TEXT,
-                    FOREIGN KEY (paciente_cedula) REFERENCES Paciente(cedula)
+                    FOREIGN KEY (paciente_cedula) REFERENCES Pacientes(cedula)
                 ) ENGINE=InnoDB
             ''')
 
@@ -537,7 +538,7 @@ class CrearBaseDatos:
                     general TEXT,
                     gastrointestinal TEXT,
                     genitourinario TEXT,
-                    FOREIGN KEY (paciente_cedula) REFERENCES Paciente(cedula)
+                    FOREIGN KEY (paciente_cedula) REFERENCES Pacientes(cedula)
                 ) ENGINE=InnoDB
             ''')
 
@@ -568,7 +569,7 @@ class CrearBaseDatos:
                     antecedentes_prenatales TEXT,
                     neonatales TEXT,
                     inmunizacion TEXT,
-                    FOREIGN KEY (paciente_cedula) REFERENCES Paciente(cedula)
+                    FOREIGN KEY (paciente_cedula) REFERENCES Pacientes(cedula)
                 ) ENGINE=InnoDB
             ''')
 
@@ -578,7 +579,7 @@ class CrearBaseDatos:
                     paciente_cedula VARCHAR(20),
                     PRIMARY KEY (medico_cedula, paciente_cedula),
                     FOREIGN KEY (medico_cedula) REFERENCES MedicoOEnfermero(cedula),
-                    FOREIGN KEY (paciente_cedula) REFERENCES Paciente(cedula)
+                    FOREIGN KEY (paciente_cedula) REFERENCES Pacientes(cedula)
                 ) ENGINE=InnoDB
             ''')
 
@@ -632,7 +633,7 @@ class CrearBaseDatos:
                     paciente_cedula VARCHAR(20),
                     farmaco_id INT,
                     PRIMARY KEY (paciente_cedula, farmaco_id),
-                    FOREIGN KEY (paciente_cedula) REFERENCES Paciente(cedula),
+                    FOREIGN KEY (paciente_cedula) REFERENCES Pacientes(cedula),
                     FOREIGN KEY (farmaco_id) REFERENCES Farmacos(id)
                 ) ENGINE=InnoDB
             ''')
