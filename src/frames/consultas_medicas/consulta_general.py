@@ -265,9 +265,9 @@ class ConsultaGeneral(QWidget):
         h_layout1 = QHBoxLayout()
 
         self.cedula_entry = QLineEdit()
-        self.cedula_entry.setMaxLength(20)
+        self.cedula_entry.setInputMask("00000000")  # Máscara de entrada para el formato (00000000)
+        self.cedula_entry.setMaxLength(8)
         self.cedula_entry.setFixedWidth(100)
-        self.cedula_entry.textChanged.connect(self.convert_to_uppercase)
         h_layout1.addWidget(QLabel("Cédula:"))
         h_layout1.addWidget(self.cedula_entry)
 
@@ -318,9 +318,9 @@ class ConsultaGeneral(QWidget):
 
         # Nuevo campo de teléfono
         self.telefono_entry = QLineEdit()
-        self.telefono_entry.setMaxLength(20)
-        self.telefono_entry.setFixedWidth(90)
-        self.telefono_entry.textChanged.connect(self.convert_to_uppercase)
+        self.telefono_entry.setInputMask("0000-0000000")  # Máscara de entrada para el formato (0000-0000000)
+        self.telefono_entry.setMaxLength(12)
+        self.telefono_entry.setFixedWidth(110)
         h_layout2.addWidget(QLabel("Teléfono:"))
         h_layout2.addWidget(self.telefono_entry)
 
@@ -336,10 +336,9 @@ class ConsultaGeneral(QWidget):
         h_layout2.addWidget(QLabel("Estado Civil:"))
         h_layout2.addWidget(self.estado_civil_entry)
 
-        self.nacionalidad_entry = QLineEdit()
-        self.nacionalidad_entry.setMaxLength(20)
+        self.nacionalidad_entry = QComboBox()
+        self.nacionalidad_entry.addItems(["Seleccione", "Venezolana", "Extranjera"])
         self.nacionalidad_entry.setFixedWidth(90)
-        self.nacionalidad_entry.textChanged.connect(self.convert_to_uppercase)
         h_layout2.addWidget(QLabel("Nacionalidad:"))
         h_layout2.addWidget(self.nacionalidad_entry)
 
@@ -377,9 +376,9 @@ class ConsultaGeneral(QWidget):
         h_layout3.addWidget(self.nombre_apellido_emergencia_entry)
 
         self.telefono_emergencia_entry = QLineEdit()
-        self.telefono_emergencia_entry.setMaxLength(20)
-        self.telefono_emergencia_entry.setFixedWidth(100)
-        self.telefono_emergencia_entry.textChanged.connect(self.convert_to_uppercase)
+        self.telefono_emergencia_entry.setInputMask("0000-0000000")  # Máscara de entrada para el formato (0000-0000000)
+        self.telefono_emergencia_entry.setMaxLength(12)
+        self.telefono_emergencia_entry.setFixedWidth(110)
         h_layout3.addWidget(QLabel("Teléfono de Emergencia:"))
         h_layout3.addWidget(self.telefono_emergencia_entry)
 
@@ -570,9 +569,8 @@ class ConsultaGeneral(QWidget):
         self.historia_clinica_window.show()
 
     def recibir_datos_historia_clinica(self, datos):
-        for i, (campo, valor) in enumerate(datos.items(), start=1):
+        for campo, valor in datos.items():
             if hasattr(self, campo):
-                print(f"{i}. Recibiendo {campo}: {valor}")  # Depuración
                 widget = getattr(self, campo)
                 if isinstance(widget, QLineEdit):
                     widget.setText(valor.upper())
@@ -588,8 +586,51 @@ class ConsultaGeneral(QWidget):
         sender = self.sender()
         sender.setText(text.upper())
 
+    def clear_fields(self):
+        self.cedula_entry.clear()
+        self.primer_nombre_entry.clear()
+        self.segundo_nombre_entry.clear()
+        self.primer_apellido_entry.clear()
+        self.segundo_apellido_entry.clear()
+        self.age_label_paciente.clear()
+        self.fecha_nacimiento_entry.setDate(QDate.currentDate())
+        self.telefono_entry.clear()
+        self.genero_entry.setCurrentIndex(0)
+        self.estado_civil_entry.setCurrentIndex(0)
+        self.nacionalidad_entry.setCurrentIndex(0)
+        self.profesion_ocupacion_entry.clear()
+        self.lugar_nacimiento_entry.clear()
+        self.religion_entry.clear()
+        self.nombre_apellido_emergencia_entry.clear()
+        self.telefono_emergencia_entry.clear()
+        self.parentesco_entry.clear()
+        self.direccion_entry.clear()
+        self.temperatura_entry.clear()
+        self.pulso_entry.clear()
+        self.respiracion_entry.clear()
+        self.frecuencia_cardiaca_entry.clear()
+        self.tension_arterial_maxima_entry.clear()
+        self.tension_arterial_minima_entry.clear()
+        self.peso_entry.clear()
+        self.talla_entry.clear()
+        self.grasa_corporal_entry.clear()
+        self.indice_masa_corporal_entry.clear()
+        self.motivo_consulta_entry.clear()
+        self.enfermedad_actual_entry.clear()
+        self.diagnostico_admision_entry.clear()
+        self.intervencion_tratamiento_entry.clear()
+        self.diagnostico_final_entry.clear()
+        self.estado_actual_entry.setCurrentIndex(0)
+        self.autopsia_entry.setCurrentIndex(0)
+        self.fecha_alta_entry.setDate(QDate.currentDate())
+        self.hora_alta_entry.clear()
+
     def save_data(self):
-        
+        # Verificar que el campo estado_actual esté seleccionado
+        if self.estado_actual_entry.currentText() == "Seleccione":
+            QMessageBox.warning(self, "Campo Obligatorio", "Por favor seleccione un estado actual.")
+            return
+
         # Recopilar datos del formulario y convertir a mayúsculas
         paciente_data = {
             "cedula": self.cedula_entry.text().upper(),
@@ -599,9 +640,9 @@ class ConsultaGeneral(QWidget):
             "segundo_apellido": self.segundo_apellido_entry.text().upper(),
             "fecha_nacimiento": self.fecha_nacimiento_entry.date().toString("yyyy-MM-dd"),
             "telefono": self.telefono_entry.text().upper(),
-            "genero": self.genero_entry.currentText(),
-            "estado_civil": self.estado_civil_entry.currentText(),
-            "nacionalidad": self.nacionalidad_entry.text().upper(),
+            "genero": self.genero_entry.currentText() if self.genero_entry.currentText() != "Seleccione" else "",
+            "estado_civil": self.estado_civil_entry.currentText() if self.estado_civil_entry.currentText() != "Seleccione" else "",
+            "nacionalidad": self.nacionalidad_entry.currentText() if self.nacionalidad_entry.currentText() != "Seleccione" else "",
             "profesion_ocupacion": self.profesion_ocupacion_entry.text().upper(),
             "lugar_nacimiento": self.lugar_nacimiento_entry.text().upper(),
             "religion": self.religion_entry.text().upper(),
@@ -637,8 +678,8 @@ class ConsultaGeneral(QWidget):
             "diagnostico_admision": self.diagnostico_admision_entry.toPlainText(),
             "intervencion_tratamiento": self.intervencion_tratamiento_entry.toPlainText(),
             "diagnostico_final": self.diagnostico_final_entry.toPlainText(),
-            "estado_actual": self.estado_actual_entry.currentText(),
-            "autopsia_pedida": self.autopsia_entry.currentText(),
+            "estado_actual": self.estado_actual_entry.currentText() if self.estado_actual_entry.currentText() != "Seleccione" else "",
+            "autopsia_pedida": self.autopsia_entry.currentText() if self.autopsia_entry.currentText() != "Seleccione" else "",
             "fecha_alta": self.fecha_alta_entry.date().toString("yyyy-MM-dd"),
             "hora_alta": self.hora_alta_entry.text(),
             "adenitis": self.adenitis_entry.text(),
@@ -816,11 +857,6 @@ class ConsultaGeneral(QWidget):
             "otros_13_8": self.otros_13_8_entry.text()
         }
 
-        # Depuración de datos de historia clínica personal 1
-        print("Datos de Historia Clínica Personal 1:")
-        for i, (campo, valor) in enumerate(historia_clinica_personal1_data.items(), start=1):
-            print(f"{i}. {campo}: {valor}")
-
         historia_clinica_personal2_data = {
             "pulso_h": self.pulso_h_entry.text(),
             "paredes_vasculares": self.paredes_vasculares_entry.text(),
@@ -894,11 +930,6 @@ class ConsultaGeneral(QWidget):
             "coordinacion": self.coordinacion_entry.text(),
             "otros_21_11": self.otros_21_11_entry.text()
         }
-
-        # Depuración de datos de historia clínica personal 2
-        print("Datos de Historia Clínica Personal 2:")
-        for i, (campo, valor) in enumerate(historia_clinica_personal2_data.items(), start=1):
-            print(f"{i}. {campo}: {valor}")
         
         # Conectar a la base de datos y guardar los datos
         db = CreateConnection()
@@ -982,10 +1013,7 @@ class ConsultaGeneral(QWidget):
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """
 
-                num_placeholders = query_historia_clinica_personal2.count('%s')
-                print("Número de %s en query_historia_clinica_personal2:", num_placeholders)
-
-                historia_clinica_personal2_values = (
+                cursor.execute(query_historia_clinica_personal2, (
                     paciente_cedula, historia_clinica_personal2_data["pulso_h"], historia_clinica_personal2_data["paredes_vasculares"], historia_clinica_personal2_data["caracteres"], historia_clinica_personal2_data["otros_14_4"],
                     historia_clinica_personal2_data["aspecto"], historia_clinica_personal2_data["circunferencia_abdomen"], historia_clinica_personal2_data["peristalsis"], historia_clinica_personal2_data["cicatrices_abdomen"],
                     historia_clinica_personal2_data["defensa"], historia_clinica_personal2_data["sensibilidad_abdomen"], historia_clinica_personal2_data["contracturas"], historia_clinica_personal2_data["tumoraciones"],
@@ -1004,24 +1032,12 @@ class ConsultaGeneral(QWidget):
                     historia_clinica_personal2_data["sensibilidad_objetiva"], historia_clinica_personal2_data["motilidad"], historia_clinica_personal2_data["reflectividad"], historia_clinica_personal2_data["escritura"],
                     historia_clinica_personal2_data["troficos"], historia_clinica_personal2_data["marcha"], historia_clinica_personal2_data["romberg"], historia_clinica_personal2_data["orientacion"],
                     historia_clinica_personal2_data["lenguaje"], historia_clinica_personal2_data["coordinacion"], historia_clinica_personal2_data["otros_21_11"]
-                )
-                print("Datos insertados en historia_clinica_personal2:", historia_clinica_personal2_data)
-                print("Consulta SQL ejecutada para historia_clinica_personal2:", cursor.statement)
-
-                # Depuración: imprimir la consulta y los valores
-                print("Query Historia Clinica Personal 2:", query_historia_clinica_personal2)
-                print("Número de valores:", len(historia_clinica_personal2_values))
-                print("Valores Historia Clinica Personal 2:", historia_clinica_personal2_values)
-
-                cursor.execute(query_historia_clinica_personal2, historia_clinica_personal2_values)
-                print("Datos insertados en historia_clinica_personal2:", historia_clinica_personal2_data)
-                print("Consulta SQL ejecutada para historia_clinica_personal2:", cursor.statement)
+                ))
 
                 # Commit de los cambios
                 connection.commit()
-
-                # Mostrar un mensaje de éxito
                 QMessageBox.information(self, "Éxito", "Datos guardados correctamente.")
+                self.clear_fields()  # Limpiar los campos después de guardar los datos
             except Error as e:
                 print(f"Error al guardar los datos: {e}")  # Imprimir el error en la consola
                 QMessageBox.critical(self, "Error", f"Error al guardar los datos: {e}")

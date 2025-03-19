@@ -250,7 +250,7 @@ class Inicio(QWidget):
             return
 
         cursor = connection.cursor()
-        cursor.execute("SELECT primer_nombre, primer_apellido FROM paciente WHERE cedula = %s", (cedula,))
+        cursor.execute("SELECT primer_nombre, primer_apellido FROM pacientes WHERE cedula = %s", (cedula,))
         paciente = cursor.fetchone()
         connection.close()
 

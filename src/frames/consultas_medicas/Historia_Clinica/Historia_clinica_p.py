@@ -263,7 +263,6 @@ class MainWindow(QMainWindow):
                 v_layout.addWidget(line_edit)
                 h_layout.addLayout(v_layout)
                 setattr(self, f"{campo}_entry", line_edit)  # Guardar el QLineEdit en una variable de instancia
-                print(f"Variable temporal creada: {campo}_entry")  # Depuración
             campos_layout.addLayout(h_layout)
 
         seccion_layout.addWidget(boton)
@@ -276,7 +275,6 @@ class MainWindow(QMainWindow):
         for campo in dir(self):
             if campo.endswith('_entry'):
                 datos[campo] = getattr(self, campo).text()
-                print(f"Cargando dato: {campo} = {datos[campo]}")  # Depuración
         # Emitir la señal con los datos
         self.datos_cargados.emit(datos)
         self.close()  # Cerrar la ventana después de cargar los datos
