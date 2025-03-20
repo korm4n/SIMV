@@ -154,9 +154,11 @@ class Inicio(QWidget):
         # Campos de entrada y botón "Siguiente"
         input_layout = QVBoxLayout()
         self.cedula_input = QLineEdit()
+        self.cedula_input.setInputMask("00000000")
         self.cedula_input.setPlaceholderText("Cédula")
         self.cedula_input.setFixedWidth(100)
         self.cedula_input.editingFinished.connect(self.verificar_cedula)  # Conectar el evento de edición terminada
+        self.cedula_input.textChanged.connect(self.mover_cursor_al_inicio)  # Conectar para mover el cursor al inicio
         input_layout.addWidget(self.cedula_input)
 
         self.primer_nombre_input = QLineEdit()
@@ -290,3 +292,7 @@ class Inicio(QWidget):
         sender.blockSignals(True)
         sender.setText(text.upper())
         sender.blockSignals(False)
+
+    def mover_cursor_al_inicio(self):
+        if self.cedula_input.text() == "":
+            self.cedula_input.setCursorPosition(0)

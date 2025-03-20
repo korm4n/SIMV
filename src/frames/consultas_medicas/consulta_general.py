@@ -14,6 +14,9 @@ class ConsultaGeneral(QWidget):
         layout = QVBoxLayout()
         self.setLayout(layout)
 
+        # Inicializar la instancia de MainWindow
+        self.historia_clinica_window = MainWindow()
+
         # Definir todas las variables temporales como QLineEdit
         self.adenitis_entry = QLineEdit()
         self.alergia_p_entry = QLineEdit()
@@ -268,6 +271,9 @@ class ConsultaGeneral(QWidget):
         self.cedula_entry.setInputMask("00000000")  # Máscara de entrada para el formato (00000000)
         self.cedula_entry.setMaxLength(8)
         self.cedula_entry.setFixedWidth(100)
+        self.cedula_entry.setCursorPosition(0)  # Asegurar que el cursor esté a la izquierda
+        self.cedula_entry.editingFinished.connect(self.check_cedula)  # Conectar el evento de edición terminada
+        self.cedula_entry.textChanged.connect(self.mover_cursor_al_inicio)  # Conectar para mover el cursor al inicio
         h_layout1.addWidget(QLabel("Cédula:"))
         h_layout1.addWidget(self.cedula_entry)
 
@@ -325,7 +331,7 @@ class ConsultaGeneral(QWidget):
         h_layout2.addWidget(self.telefono_entry)
 
         self.genero_entry = QComboBox()
-        self.genero_entry.addItems(["Seleccione", "Masculino", "Femenino"])
+        self.genero_entry.addItems(["Seleccione", "Masculino", "Femenino", "Otro"])
         self.genero_entry.setFixedWidth(80)
         h_layout2.addWidget(QLabel("Género:"))
         h_layout2.addWidget(self.genero_entry)
@@ -548,8 +554,9 @@ class ConsultaGeneral(QWidget):
         layout.addLayout(button_layout)
 
         # Conectar la señal de datos cargados
-        self.historia_clinica_window = MainWindow()
         self.historia_clinica_window.datos_cargados.connect(self.recibir_datos_historia_clinica)
+
+        self.cedula_entry.editingFinished.connect(self.check_cedula)
 
     def go_back(self):
         self.parent.show_main_menu()
@@ -938,16 +945,29 @@ class ConsultaGeneral(QWidget):
             try:
                 cursor = connection.cursor()
 
-                # Guardar datos en la tabla pacientes
-                query_paciente = """
-                    INSERT INTO pacientes (cedula, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, fecha_nacimiento, telefono, genero, estado_civil, nacionalidad, profesion_ocupacion, lugar_nacimiento, religion, nombre_apellido_emergencia, telefono_emergencia, parentesco, direccion)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                """
-                cursor.execute(query_paciente, (
-                    paciente_data["cedula"], paciente_data["primer_nombre"], paciente_data["segundo_nombre"], paciente_data["primer_apellido"], paciente_data["segundo_apellido"],
-                    paciente_data["fecha_nacimiento"], paciente_data["telefono"], paciente_data["genero"], paciente_data["estado_civil"], paciente_data["nacionalidad"], paciente_data["profesion_ocupacion"],
-                    paciente_data["lugar_nacimiento"], paciente_data["religion"], paciente_data["nombre_apellido_emergencia"], paciente_data["telefono_emergencia"], paciente_data["parentesco"], paciente_data["direccion"]
-                ))
+                # Verificar si la cédula ya existe
+                query_check = "SELECT COUNT(*) FROM pacientes WHERE cedula = %s"
+                cursor.execute(query_check, (paciente_cedula,))
+                exists = cursor.fetchone()[0]
+
+                if exists:
+                    # Actualizar datos del paciente existente
+                    query_update = """
+                        UPDATE pacientes SET primer_nombre = %s, segundo_nombre = %s, primer_apellido = %s, segundo_apellido = %s, fecha_nacimiento = %s, telefono = %s, genero = %s, estado_civil = %s, nacionalidad = %s, profesion_ocupacion = %s, lugar_nacimiento = %s, religion = %s, nombre_apellido_emergencia = %s, telefono_emergencia = %s, parentesco = %s, direccion = %s
+                        WHERE cedula = %s
+                    """
+                    cursor.execute(query_update, (
+                        paciente_data["primer_nombre"], paciente_data["segundo_nombre"], paciente_data["primer_apellido"], paciente_data["segundo_apellido"], paciente_data["fecha_nacimiento"], paciente_data["telefono"], paciente_data["genero"], paciente_data["estado_civil"], paciente_data["nacionalidad"], paciente_data["profesion_ocupacion"], paciente_data["lugar_nacimiento"], paciente_data["religion"], paciente_data["nombre_apellido_emergencia"], paciente_data["telefono_emergencia"], paciente_data["parentesco"], paciente_data["direccion"], paciente_cedula
+                    ))
+                else:
+                    # Insertar nuevo registro
+                    query_insert = """
+                        INSERT INTO pacientes (cedula, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, fecha_nacimiento, telefono, genero, estado_civil, nacionalidad, profesion_ocupacion, lugar_nacimiento, religion, nombre_apellido_emergencia, telefono_emergencia, parentesco, direccion)
+                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    """
+                    cursor.execute(query_insert, (
+                        paciente_data["cedula"], paciente_data["primer_nombre"], paciente_data["segundo_nombre"], paciente_data["primer_apellido"], paciente_data["segundo_apellido"], paciente_data["fecha_nacimiento"], paciente_data["telefono"], paciente_data["genero"], paciente_data["estado_civil"], paciente_data["nacionalidad"], paciente_data["profesion_ocupacion"], paciente_data["lugar_nacimiento"], paciente_data["religion"], paciente_data["nombre_apellido_emergencia"], paciente_data["telefono_emergencia"], paciente_data["parentesco"], paciente_data["direccion"]
+                    ))
 
                 # Guardar datos en la tabla HistoriaClinicaPersonal
                 query_historia_clinica_personal = """
@@ -1037,6 +1057,7 @@ class ConsultaGeneral(QWidget):
                 # Commit de los cambios
                 connection.commit()
                 QMessageBox.information(self, "Éxito", "Datos guardados correctamente.")
+                self.limpiar_campos_historia_clinica()  # Limpiar los campos después de guardar los datos
                 self.clear_fields()  # Limpiar los campos después de guardar los datos
             except Error as e:
                 print(f"Error al guardar los datos: {e}")  # Imprimir el error en la consola
@@ -1045,3 +1066,56 @@ class ConsultaGeneral(QWidget):
                 db.close_connection(connection)
         else:
             QMessageBox.critical(self, "Error", "No se pudo conectar a la base de datos.")
+
+    def limpiar_campos_historia_clinica(self):
+        # Asegúrate de tener una referencia a la instancia de MainWindow
+        if hasattr(self, 'historia_clinica_window'):
+            self.historia_clinica_window.limpiar_campos()
+
+    def check_cedula(self):
+        cedula = self.cedula_entry.text().strip()
+        if not cedula:
+            return
+
+        db = CreateConnection()
+        connection = db.create_connection()
+        if connection:
+            try:
+                cursor = connection.cursor()
+                query = "SELECT * FROM pacientes WHERE cedula = %s"
+                cursor.execute(query, (cedula,))
+                result = cursor.fetchone()
+                if result:
+                    self.load_patient_data(result)
+                else:
+                    QMessageBox.information(self, "No encontrado", "No se encontró un paciente con esta cédula.")
+            except Error as e:
+                print(f"Error al verificar la cédula: {e}")
+                QMessageBox.critical(self, "Error", f"Error al verificar la cédula: {e}")
+            finally:
+                db.close_connection(connection)
+
+    def load_patient_data(self, data):
+        # Asumiendo que los datos están en el mismo orden que las columnas de la tabla
+        self.cedula_entry.setText(data[0])
+        self.primer_nombre_entry.setText(data[1])
+        self.segundo_nombre_entry.setText(data[2])
+        self.primer_apellido_entry.setText(data[3])
+        self.segundo_apellido_entry.setText(data[4])
+        self.fecha_nacimiento_entry.setDate(QDate.fromString(str(data[5]), "yyyy-MM-dd"))
+        self.telefono_entry.setText(data[6])
+        self.genero_entry.setCurrentText(data[8])
+        self.estado_civil_entry.setCurrentText(data[9])
+        self.nacionalidad_entry.setCurrentText(data[11])
+        self.profesion_ocupacion_entry.setText(data[12])
+        self.lugar_nacimiento_entry.setText(data[7])
+        self.religion_entry.setText(data[13])
+        self.nombre_apellido_emergencia_entry.setText(data[14])
+        self.telefono_emergencia_entry.setText(data[15])
+        self.parentesco_entry.setText(data[16])
+        self.direccion_entry.setText(data[10])
+        self.update_age_paciente()
+
+    def mover_cursor_al_inicio(self):
+        if self.cedula_entry.text() == "":
+            self.cedula_entry.setCursorPosition(0)

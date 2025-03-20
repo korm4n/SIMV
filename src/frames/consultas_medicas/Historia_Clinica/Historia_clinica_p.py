@@ -230,6 +230,7 @@ class MainWindow(QMainWindow):
             # Lógica para guardar la información
             event.accept()
         elif reply == QMessageBox.Discard:
+            self.limpiar_campos()  # Limpiar los campos si se descartan los cambios
             event.accept()
         else:
             event.ignore()
@@ -278,6 +279,11 @@ class MainWindow(QMainWindow):
         # Emitir la señal con los datos
         self.datos_cargados.emit(datos)
         self.close()  # Cerrar la ventana después de cargar los datos
+        
+    def limpiar_campos(self):
+        for campo in dir(self):
+            if campo.endswith('_entry'):
+                getattr(self, campo).clear()
 
 def main():
     app = QApplication(sys.argv)
