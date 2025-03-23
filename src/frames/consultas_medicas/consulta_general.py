@@ -543,6 +543,14 @@ class ConsultaGeneral(QWidget):
         self.back_button.clicked.connect(self.go_back)
         button_layout.addWidget(self.back_button, alignment=Qt.AlignRight)
 
+        # Botón "Limpiar" en la esquina inferior derecha
+        self.clear_button = QPushButton("Limpiar")
+        self.clear_button.setIcon(QIcon("iconos/limpiar.png"))  # Establecer la imagen del botón
+        self.clear_button.setIconSize(QSize(24, 24))  # Ajustar el tamaño de la imagen
+        self.clear_button.setFixedSize(100, 40)  # Ajustar el tamaño del botón
+        self.clear_button.clicked.connect(self.clear_all_fields)  # Conectar la señal
+        button_layout.addWidget(self.clear_button, alignment=Qt.AlignRight)
+
         # Botón "Guardar" en la esquina inferior derecha
         self.save_button = QPushButton("Guardar")
         self.save_button.setIcon(QIcon("iconos/guardar.png"))  # Establecer la imagen del botón
@@ -1119,3 +1127,7 @@ class ConsultaGeneral(QWidget):
     def mover_cursor_al_inicio(self):
         if self.cedula_entry.text() == "":
             self.cedula_entry.setCursorPosition(0)
+
+    def clear_all_fields(self):
+        self.clear_fields()
+        self.historia_clinica_window.limpiar_campos()

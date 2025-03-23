@@ -8,7 +8,7 @@ class CreateConnection:
     def __init__(self):
         self.usuario = DB_USER
         self.contrasena = DB_PASSWORD
-
+ 
     def create_connection(self):
         """Create a database connection to the MySQL database"""
         try:
