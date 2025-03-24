@@ -383,7 +383,6 @@ class CrearBaseDatos:
                     enfermedad_actual TEXT,
                     antecedentes_personales TEXT,
                     antecedentes_familiares TEXT,
-                    antecedentes_gineco_obstetricos TEXT,
                     menarquia TEXT,
                     ciclo TEXT,
                     tipo TEXT,

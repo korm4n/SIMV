@@ -225,68 +225,92 @@ class ConsultaGinecologica(QWidget):
         self.antecedentes_familiares_entry.setFixedWidth(960)
         form_layout.addRow(QLabel("Antecedentes Familiares:"), self.antecedentes_familiares_entry)
 
-        self.antecedentes_gineco_obstetricos_entry = QTextEdit()
-        self.antecedentes_gineco_obstetricos_entry.setFixedWidth(960)
-        form_layout.addRow(QLabel("Antecedentes Gineco<br>Obstetricos:"), self.antecedentes_gineco_obstetricos_entry)
+                # Crear un layout horizontal para el título "Antecedentes Gineco<br>Obstetricos:"
+        h_layout6_antecedentes_gineco_obstetricos= QHBoxLayout()
+        self.antecedentes_gineco_obstetricos_button = QToolButton()
+        self.antecedentes_gineco_obstetricos_button.setText("Antecedentes Gineco Obstetricos:")
+        self.antecedentes_gineco_obstetricos_button.setStyleSheet("color: black; font-size: 16px; font-weight: bold; text-align: left;")
+        self.antecedentes_gineco_obstetricos_button.setCheckable(True)
+        self.antecedentes_gineco_obstetricos_button.setChecked(False)
+        self.antecedentes_gineco_obstetricos_button.setArrowType(Qt.RightArrow)
+        self.antecedentes_gineco_obstetricos_button.setToolButtonStyle(Qt.ToolButtonTextBesideIcon) 
+        self.antecedentes_gineco_obstetricos_button.clicked.connect(self.toggle_antecedentes_gineco_obstetricos)
+        h_layout6_antecedentes_gineco_obstetricos.addWidget(self.antecedentes_gineco_obstetricos_button)
+        form_layout.addRow(h_layout6_antecedentes_gineco_obstetricos)
 
-        # Crear un nuevo layout horizontal para los campos adicionales
+        # Crear un widget contenedor para los campos de "Antecedentes Gineco Obstetricos"
+        self.antecedentes_gineco_obstetricos_widget = QWidget()
+        self.antecedentes_gineco_obstetricos_widget.setVisible(False)
+        antecedentes_gineco_obstetricos_layout = QVBoxLayout(self.antecedentes_gineco_obstetricos_widget)
+
+        # Crear layouts horizontales para organizar los campos
         h_layout6 = QHBoxLayout()
-        h_layout6.setAlignment(Qt.AlignLeft)  # Alinear a la izquierda
+        h_layout6.setAlignment(Qt.AlignLeft)
 
         self.menarquia_entry = QLineEdit()
         self.menarquia_entry.setMaxLength(255)
-        self.menarquia_entry.setFixedWidth(100)
+        self.menarquia_entry.setFixedWidth(150)
         h_layout6.addWidget(QLabel("Menarquia:"))
         h_layout6.addWidget(self.menarquia_entry)
 
         self.ciclo_entry = QLineEdit()
         self.ciclo_entry.setMaxLength(255)
-        self.ciclo_entry.setFixedWidth(100)
+        self.ciclo_entry.setFixedWidth(150)
         h_layout6.addWidget(QLabel("Ciclo:"))
         h_layout6.addWidget(self.ciclo_entry)
 
         self.tipo_entry = QLineEdit()
         self.tipo_entry.setMaxLength(255)
-        self.tipo_entry.setFixedWidth(100)
+        self.tipo_entry.setFixedWidth(150)
         h_layout6.addWidget(QLabel("Tipo:"))
         h_layout6.addWidget(self.tipo_entry)
 
+        h_layout6.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        antecedentes_gineco_obstetricos_layout.addLayout(h_layout6)
+
+        h_layout7 = QHBoxLayout()
+        h_layout7.setAlignment(Qt.AlignLeft)
+
         self.prs_entry = QLineEdit()
         self.prs_entry.setMaxLength(255)
-        self.prs_entry.setFixedWidth(100)
-        h_layout6.addWidget(QLabel("PRS:"))
-        h_layout6.addWidget(self.prs_entry)
+        self.prs_entry.setFixedWidth(150)
+        h_layout7.addWidget(QLabel("PRS:"))
+        h_layout7.addWidget(self.prs_entry)
 
         self.ps_entry = QLineEdit()
         self.ps_entry.setMaxLength(255)
-        self.ps_entry.setFixedWidth(100)
-        h_layout6.addWidget(QLabel("PS:"))
-        h_layout6.addWidget(self.ps_entry)
+        self.ps_entry.setFixedWidth(150)
+        h_layout7.addWidget(QLabel("PS:"))
+        h_layout7.addWidget(self.ps_entry)
 
         self.menopausia_entry = QLineEdit()
         self.menopausia_entry.setMaxLength(255)
-        self.menopausia_entry.setFixedWidth(100)
-        h_layout6.addWidget(QLabel("Menopausia:"))
-        h_layout6.addWidget(self.menopausia_entry)
+        self.menopausia_entry.setFixedWidth(150)
+        h_layout7.addWidget(QLabel("Menopausia:"))
+        h_layout7.addWidget(self.menopausia_entry)
 
-        h_layout6.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Expanding, QSizePolicy.Minimum))
-        form_layout.addRow(h_layout6)
+        h_layout7.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        antecedentes_gineco_obstetricos_layout.addLayout(h_layout7)
 
-        # Crear un nuevo layout horizontal para los campos adicionales
-        h_layout7 = QHBoxLayout()
-        h_layout7.setAlignment(Qt.AlignLeft)  # Alinear a la izquierda
+        h_layout8 = QHBoxLayout()
+        h_layout8.setAlignment(Qt.AlignLeft)
 
         self.anticonceptivo_entry = QLineEdit()
         self.anticonceptivo_entry.setMaxLength(255)
-        self.anticonceptivo_entry.setFixedWidth(100)
-        h_layout7.addWidget(QLabel("Anticonceptivo:"))
-        h_layout7.addWidget(self.anticonceptivo_entry)
+        self.anticonceptivo_entry.setFixedWidth(150)
+        h_layout8.addWidget(QLabel("Anticonceptivo:"))
+        h_layout8.addWidget(self.anticonceptivo_entry)
 
         self.ets_entry = QLineEdit()
         self.ets_entry.setMaxLength(255)
-        self.ets_entry.setFixedWidth(100)
-        h_layout7.addWidget(QLabel("ETS:"))
-        h_layout7.addWidget(self.ets_entry)
+        self.ets_entry.setFixedWidth(150)
+        h_layout8.addWidget(QLabel("ETS:"))
+        h_layout8.addWidget(self.ets_entry)
+
+        h_layout8.addSpacerItem(QSpacerItem(20, 20, QSizePolicy.Expanding, QSizePolicy.Minimum))
+        antecedentes_gineco_obstetricos_layout.addLayout(h_layout8)
+
+        form_layout.addRow(self.antecedentes_gineco_obstetricos_widget)
 
         # Crear un layout horizontal para el título "Citología"
         h_layout_citologia = QHBoxLayout()
@@ -313,35 +337,35 @@ class ConsultaGinecologica(QWidget):
         fecha_entry1 = QDateEdit()
         fecha_entry1.setObjectName("1CFECHA")
         fecha_entry1.setCalendarPopup(True)
-        fecha_entry1.setFixedWidth(100)
+        fecha_entry1.setFixedWidth(150)
         h_layout1.addWidget(QLabel("1 CFECHA:"))
         h_layout1.addWidget(fecha_entry1)
 
         rn_entry1 = QLineEdit()
         rn_entry1.setObjectName("1RN")
         rn_entry1.setMaxLength(255)
-        rn_entry1.setFixedWidth(100)
+        rn_entry1.setFixedWidth(150)
         h_layout1.addWidget(QLabel("1 RN:"))
         h_layout1.addWidget(rn_entry1)
 
         g_mf_entry1 = QLineEdit()
         g_mf_entry1.setObjectName("1G_MF")
         g_mf_entry1.setMaxLength(255)
-        g_mf_entry1.setFixedWidth(100)
+        g_mf_entry1.setFixedWidth(150)
         h_layout1.addWidget(QLabel("1 G MF:"))
         h_layout1.addWidget(g_mf_entry1)
 
         pam_entry1 = QLineEdit()
         pam_entry1.setObjectName("1PAM")
         pam_entry1.setMaxLength(255)
-        pam_entry1.setFixedWidth(100)
+        pam_entry1.setFixedWidth(150)
         h_layout1.addWidget(QLabel("1 PAM:"))
         h_layout1.addWidget(pam_entry1)
 
         tan_entry1 = QLineEdit()
         tan_entry1.setObjectName("1TAN")
         tan_entry1.setMaxLength(255)
-        tan_entry1.setFixedWidth(100)
+        tan_entry1.setFixedWidth(150)
         h_layout1.addWidget(QLabel("1 TAN:"))
         h_layout1.addWidget(tan_entry1)
 
@@ -356,35 +380,35 @@ class ConsultaGinecologica(QWidget):
         fecha_entry2 = QDateEdit()
         fecha_entry2.setObjectName("2CFECHA")
         fecha_entry2.setCalendarPopup(True)
-        fecha_entry2.setFixedWidth(100)
+        fecha_entry2.setFixedWidth(150)
         h_layout2.addWidget(QLabel("2 CFECHA:"))
         h_layout2.addWidget(fecha_entry2)
 
         rn_entry2 = QLineEdit()
         rn_entry2.setObjectName("2RN")
         rn_entry2.setMaxLength(255)
-        rn_entry2.setFixedWidth(100)
+        rn_entry2.setFixedWidth(150)
         h_layout2.addWidget(QLabel("2 RN:"))
         h_layout2.addWidget(rn_entry2)
 
         g_mf_entry2 = QLineEdit()
         g_mf_entry2.setObjectName("2G_MF")
         g_mf_entry2.setMaxLength(255)
-        g_mf_entry2.setFixedWidth(100)
+        g_mf_entry2.setFixedWidth(150)
         h_layout2.addWidget(QLabel("2 G MF:"))
         h_layout2.addWidget(g_mf_entry2)
 
         pam_entry2 = QLineEdit()
         pam_entry2.setObjectName("2PAM")
         pam_entry2.setMaxLength(255)
-        pam_entry2.setFixedWidth(100)
+        pam_entry2.setFixedWidth(150)
         h_layout2.addWidget(QLabel("2 PAM:"))
         h_layout2.addWidget(pam_entry2)
 
         tan_entry2 = QLineEdit()
         tan_entry2.setObjectName("2TAN")
         tan_entry2.setMaxLength(255)
-        tan_entry2.setFixedWidth(100)
+        tan_entry2.setFixedWidth(150)
         h_layout2.addWidget(QLabel("2 TAN:"))
         h_layout2.addWidget(tan_entry2)
 
@@ -398,35 +422,35 @@ class ConsultaGinecologica(QWidget):
         fecha_entry3 = QDateEdit()
         fecha_entry3.setObjectName("3CFECHA")
         fecha_entry3.setCalendarPopup(True)
-        fecha_entry3.setFixedWidth(100)
+        fecha_entry3.setFixedWidth(150)
         h_layout3.addWidget(QLabel("3 CFECHA:"))
         h_layout3.addWidget(fecha_entry3)
 
         rn_entry3 = QLineEdit()
         rn_entry3.setObjectName("3RN")
         rn_entry3.setMaxLength(255)
-        rn_entry3.setFixedWidth(100)
+        rn_entry3.setFixedWidth(150)
         h_layout3.addWidget(QLabel("3 RN:"))
         h_layout3.addWidget(rn_entry3)
 
         g_mf_entry3 = QLineEdit()
         g_mf_entry3.setObjectName("3G_MF")
         g_mf_entry3.setMaxLength(255)
-        g_mf_entry3.setFixedWidth(100)
+        g_mf_entry3.setFixedWidth(150)
         h_layout3.addWidget(QLabel("3 G MF:"))
         h_layout3.addWidget(g_mf_entry3)
 
         pam_entry3 = QLineEdit()
         pam_entry3.setObjectName("3PAM")
         pam_entry3.setMaxLength(255)
-        pam_entry3.setFixedWidth(100)
+        pam_entry3.setFixedWidth(150)
         h_layout3.addWidget(QLabel("3 PAM:"))
         h_layout3.addWidget(pam_entry3)
 
         tan_entry3 = QLineEdit()
         tan_entry3.setObjectName("3TAN")
         tan_entry3.setMaxLength(255)
-        tan_entry3.setFixedWidth(100)
+        tan_entry3.setFixedWidth(150)
         h_layout3.addWidget(QLabel("3 TAN:"))
         h_layout3.addWidget(tan_entry3)
 
@@ -440,35 +464,35 @@ class ConsultaGinecologica(QWidget):
         fecha_entry4 = QDateEdit()
         fecha_entry4.setObjectName("4CFECHA")
         fecha_entry4.setCalendarPopup(True)
-        fecha_entry4.setFixedWidth(100)
+        fecha_entry4.setFixedWidth(150)
         h_layout4.addWidget(QLabel("4 CFECHA:"))
         h_layout4.addWidget(fecha_entry4)
 
         rn_entry4 = QLineEdit()
         rn_entry4.setObjectName("4RN")
         rn_entry4.setMaxLength(255)
-        rn_entry4.setFixedWidth(100)
+        rn_entry4.setFixedWidth(150)
         h_layout4.addWidget(QLabel("4 RN:"))
         h_layout4.addWidget(rn_entry4)
 
         g_mf_entry4 = QLineEdit()
         g_mf_entry4.setObjectName("4G_MF")
         g_mf_entry4.setMaxLength(255)
-        g_mf_entry4.setFixedWidth(100)
+        g_mf_entry4.setFixedWidth(150)
         h_layout4.addWidget(QLabel("4 G MF:"))
         h_layout4.addWidget(g_mf_entry4)
 
         pam_entry4 = QLineEdit()
         pam_entry4.setObjectName("4PAM")
         pam_entry4.setMaxLength(255)
-        pam_entry4.setFixedWidth(100)
+        pam_entry4.setFixedWidth(150)
         h_layout4.addWidget(QLabel("4 PAM:"))
         h_layout4.addWidget(pam_entry4)
 
         tan_entry4 = QLineEdit()
         tan_entry4.setObjectName("4TAN")
         tan_entry4.setMaxLength(255)
-        tan_entry4.setFixedWidth(100)
+        tan_entry4.setFixedWidth(150)
         h_layout4.addWidget(QLabel("4 TAN:"))
         h_layout4.addWidget(tan_entry4)
 
@@ -482,35 +506,35 @@ class ConsultaGinecologica(QWidget):
         fecha_entry5 = QDateEdit()
         fecha_entry5.setObjectName("5CFECHA")
         fecha_entry5.setCalendarPopup(True)
-        fecha_entry5.setFixedWidth(100)
+        fecha_entry5.setFixedWidth(150)
         h_layout5.addWidget(QLabel("5 CFECHA:"))
         h_layout5.addWidget(fecha_entry5)
 
         rn_entry5 = QLineEdit()
         rn_entry5.setObjectName("5RN")
         rn_entry5.setMaxLength(255)
-        rn_entry5.setFixedWidth(100)
+        rn_entry5.setFixedWidth(150)
         h_layout5.addWidget(QLabel("5 RN:"))
         h_layout5.addWidget(rn_entry5)
 
         g_mf_entry5 = QLineEdit()
         g_mf_entry5.setObjectName("5G_MF")
         g_mf_entry5.setMaxLength(255)
-        g_mf_entry5.setFixedWidth(100)
+        g_mf_entry5.setFixedWidth(150)
         h_layout5.addWidget(QLabel("5 G MF:"))
         h_layout5.addWidget(g_mf_entry5)
 
         pam_entry5 = QLineEdit()
         pam_entry5.setObjectName("5PAM")
         pam_entry5.setMaxLength(255)
-        pam_entry5.setFixedWidth(100)
+        pam_entry5.setFixedWidth(150)
         h_layout5.addWidget(QLabel("5 PAM:"))
         h_layout5.addWidget(pam_entry5)
 
         tan_entry5 = QLineEdit()
         tan_entry5.setObjectName("5TAN")
         tan_entry5.setMaxLength(255)
-        tan_entry5.setFixedWidth(100)
+        tan_entry5.setFixedWidth(150)
         h_layout5.addWidget(QLabel("5 TAN:"))
         h_layout5.addWidget(tan_entry5)
 
@@ -542,19 +566,19 @@ class ConsultaGinecologica(QWidget):
         h_layout_embarazo_actual_fields.setAlignment(Qt.AlignLeft)  # Alinear a la izquierda
 
         self.planificado_entry = QComboBox()
-        self.planificado_entry.addItems(["N/A", "Sí", "No"])
+        self.planificado_entry.addItems(["Seleccione", "Sí", "No"])
         self.planificado_entry.setFixedWidth(100)
         h_layout_embarazo_actual_fields.addWidget(QLabel("Planificado:"))
         h_layout_embarazo_actual_fields.addWidget(self.planificado_entry)
 
         self.deseado_entry = QComboBox()
-        self.deseado_entry.addItems(["N/A", "Sí", "No"])
+        self.deseado_entry.addItems(["Seleccione", "Sí", "No"])
         self.deseado_entry.setFixedWidth(100)
         h_layout_embarazo_actual_fields.addWidget(QLabel("Deseado:"))
         h_layout_embarazo_actual_fields.addWidget(self.deseado_entry)
 
         self.aceptado_entry = QComboBox()
-        self.aceptado_entry.addItems(["N/A", "Sí", "No"])
+        self.aceptado_entry.addItems(["Seleccione", "Sí", "No"])
         self.aceptado_entry.setFixedWidth(100)
         h_layout_embarazo_actual_fields.addWidget(QLabel("Aceptado:"))
         h_layout_embarazo_actual_fields.addWidget(self.aceptado_entry)
@@ -574,19 +598,19 @@ class ConsultaGinecologica(QWidget):
 
         self.inicio_entry = QLineEdit()
         self.inicio_entry.setMaxLength(255)
-        self.inicio_entry.setFixedWidth(100)
+        self.inicio_entry.setFixedWidth(150)
         h_layout_control_fields.addWidget(QLabel("Inicio:"))
         h_layout_control_fields.addWidget(self.inicio_entry)
 
         self.sg_entry = QLineEdit()
         self.sg_entry.setMaxLength(255)
-        self.sg_entry.setFixedWidth(100)
+        self.sg_entry.setFixedWidth(150)
         h_layout_control_fields.addWidget(QLabel("SG:"))
         h_layout_control_fields.addWidget(self.sg_entry)
 
         self.pub_entry = QLineEdit()
         self.pub_entry.setMaxLength(255)
-        self.pub_entry.setFixedWidth(50)
+        self.pub_entry.setFixedWidth(100)
         h_layout_control_fields.addWidget(QLabel("Pub:"))
         h_layout_control_fields.addWidget(self.pub_entry)
 
@@ -617,7 +641,7 @@ class ConsultaGinecologica(QWidget):
 
         self.complicaciones_entry = QLineEdit()
         self.complicaciones_entry.setMaxLength(255)
-        self.complicaciones_entry.setFixedWidth(100)
+        self.complicaciones_entry.setFixedWidth(150)
         h_layout_complicaciones.addWidget(QLabel("Complicaciones:"))
         h_layout_complicaciones.addWidget(self.complicaciones_entry)
 
@@ -630,13 +654,13 @@ class ConsultaGinecologica(QWidget):
 
         self.inductores_entry = QLineEdit()
         self.inductores_entry.setMaxLength(255)
-        self.inductores_entry.setFixedWidth(100)
+        self.inductores_entry.setFixedWidth(150)
         h_layout_inductores_toxoide.addWidget(QLabel("Inductores:"))
         h_layout_inductores_toxoide.addWidget(self.inductores_entry)
 
         self.toxoide_entry = QLineEdit()
         self.toxoide_entry.setMaxLength(255)
-        self.toxoide_entry.setFixedWidth(100)
+        self.toxoide_entry.setFixedWidth(150)
         h_layout_inductores_toxoide.addWidget(QLabel("Toxoide:"))
         h_layout_inductores_toxoide.addWidget(self.toxoide_entry)
 
@@ -704,49 +728,49 @@ class ConsultaGinecologica(QWidget):
         color_entry1 = QLineEdit()
         color_entry1.setObjectName("1Color")
         color_entry1.setMaxLength(255)
-        color_entry1.setFixedWidth(100)
+        color_entry1.setFixedWidth(150)
         v_layout1.addWidget(QLabel("1 Color:"))
         v_layout1.addWidget(color_entry1)
 
         aspecto_entry1 = QLineEdit()
         aspecto_entry1.setObjectName("1Aspecto")
         aspecto_entry1.setMaxLength(255)
-        aspecto_entry1.setFixedWidth(100)
+        aspecto_entry1.setFixedWidth(150)
         v_layout1.addWidget(QLabel("1 Aspecto:"))
         v_layout1.addWidget(aspecto_entry1)
 
         densidad_entry1 = QLineEdit()
         densidad_entry1.setObjectName("1Densidad")
         densidad_entry1.setMaxLength(255)
-        densidad_entry1.setFixedWidth(100)
+        densidad_entry1.setFixedWidth(150)
         v_layout1.addWidget(QLabel("1 Densidad:"))
         v_layout1.addWidget(densidad_entry1)
 
         leucocitos_entry1 = QLineEdit()
         leucocitos_entry1.setObjectName("1Leucocitos")
         leucocitos_entry1.setMaxLength(255)
-        leucocitos_entry1.setFixedWidth(100)
+        leucocitos_entry1.setFixedWidth(150)
         v_layout1.addWidget(QLabel("1 Leucocitos:"))
         v_layout1.addWidget(leucocitos_entry1)
 
         hematies_entry1 = QLineEdit()
         hematies_entry1.setObjectName("1Hematies")
         hematies_entry1.setMaxLength(255)
-        hematies_entry1.setFixedWidth(100)
+        hematies_entry1.setFixedWidth(150)
         v_layout1.addWidget(QLabel("1 Hematíes:"))
         v_layout1.addWidget(hematies_entry1)
 
         proteinas_entry1 = QLineEdit()
         proteinas_entry1.setObjectName("1Proteinas")
         proteinas_entry1.setMaxLength(255)
-        proteinas_entry1.setFixedWidth(100)
+        proteinas_entry1.setFixedWidth(150)
         v_layout1.addWidget(QLabel("1 Proteínas:"))
         v_layout1.addWidget(proteinas_entry1)
 
         otros_entry1 = QLineEdit()
         otros_entry1.setObjectName("1Otros")
         otros_entry1.setMaxLength(255)
-        otros_entry1.setFixedWidth(100)
+        otros_entry1.setFixedWidth(150)
         v_layout1.addWidget(QLabel("1 Otros:"))
         v_layout1.addWidget(otros_entry1)
 
@@ -757,49 +781,49 @@ class ConsultaGinecologica(QWidget):
         color_entry2 = QLineEdit()
         color_entry2.setObjectName("2Color")
         color_entry2.setMaxLength(255)
-        color_entry2.setFixedWidth(100)
+        color_entry2.setFixedWidth(150)
         v_layout2.addWidget(QLabel("2 Color:"))
         v_layout2.addWidget(color_entry2)
 
         aspecto_entry2 = QLineEdit()
         aspecto_entry2.setObjectName("2Aspecto")
         aspecto_entry2.setMaxLength(255)
-        aspecto_entry2.setFixedWidth(100)
+        aspecto_entry2.setFixedWidth(150)
         v_layout2.addWidget(QLabel("2 Aspecto:"))
         v_layout2.addWidget(aspecto_entry2)
 
         densidad_entry2 = QLineEdit()
         densidad_entry2.setObjectName("2Densidad")
         densidad_entry2.setMaxLength(255)
-        densidad_entry2.setFixedWidth(100)
+        densidad_entry2.setFixedWidth(150)
         v_layout2.addWidget(QLabel("2 Densidad:"))
         v_layout2.addWidget(densidad_entry2)
 
         leucocitos_entry2 = QLineEdit()
         leucocitos_entry2.setObjectName("2Leucocitos")
         leucocitos_entry2.setMaxLength(255)
-        leucocitos_entry2.setFixedWidth(100)
+        leucocitos_entry2.setFixedWidth(150)
         v_layout2.addWidget(QLabel("2 Leucocitos:"))
         v_layout2.addWidget(leucocitos_entry2)
 
         hematies_entry2 = QLineEdit()
         hematies_entry2.setObjectName("2Hematies")
         hematies_entry2.setMaxLength(255)
-        hematies_entry2.setFixedWidth(100)
+        hematies_entry2.setFixedWidth(150)
         v_layout2.addWidget(QLabel("2 Hematíes:"))
         v_layout2.addWidget(hematies_entry2)
 
         proteinas_entry2 = QLineEdit()
         proteinas_entry2.setObjectName("2Proteinas")
         proteinas_entry2.setMaxLength(255)
-        proteinas_entry2.setFixedWidth(100)
+        proteinas_entry2.setFixedWidth(150)
         v_layout2.addWidget(QLabel("2 Proteínas:"))
         v_layout2.addWidget(proteinas_entry2)
 
         otros_entry2 = QLineEdit()
         otros_entry2.setObjectName("2Otros")
         otros_entry2.setMaxLength(255)
-        otros_entry2.setFixedWidth(100)
+        otros_entry2.setFixedWidth(150)
         v_layout2.addWidget(QLabel("2 Otros:"))
         v_layout2.addWidget(otros_entry2)
 
@@ -810,49 +834,49 @@ class ConsultaGinecologica(QWidget):
         color_entry3 = QLineEdit()
         color_entry3.setObjectName("3Color")
         color_entry3.setMaxLength(255)
-        color_entry3.setFixedWidth(100)
+        color_entry3.setFixedWidth(150)
         v_layout3.addWidget(QLabel("3 Color:"))
         v_layout3.addWidget(color_entry3)
 
         aspecto_entry3 = QLineEdit()
         aspecto_entry3.setObjectName("3Aspecto")
         aspecto_entry3.setMaxLength(255)
-        aspecto_entry3.setFixedWidth(100)
+        aspecto_entry3.setFixedWidth(150)
         v_layout3.addWidget(QLabel("3 Aspecto:"))
         v_layout3.addWidget(aspecto_entry3)
 
         densidad_entry3 = QLineEdit()
         densidad_entry3.setObjectName("3Densidad")
         densidad_entry3.setMaxLength(255)
-        densidad_entry3.setFixedWidth(100)
+        densidad_entry3.setFixedWidth(150)
         v_layout3.addWidget(QLabel("3 Densidad:"))
         v_layout3.addWidget(densidad_entry3)
 
         leucocitos_entry3 = QLineEdit()
         leucocitos_entry3.setObjectName("3Leucocitos")
         leucocitos_entry3.setMaxLength(255)
-        leucocitos_entry3.setFixedWidth(100)
+        leucocitos_entry3.setFixedWidth(150)
         v_layout3.addWidget(QLabel("3 Leucocitos:"))
         v_layout3.addWidget(leucocitos_entry3)
 
         hematies_entry3 = QLineEdit()
         hematies_entry3.setObjectName("3Hematies")
         hematies_entry3.setMaxLength(255)
-        hematies_entry3.setFixedWidth(100)
+        hematies_entry3.setFixedWidth(150)
         v_layout3.addWidget(QLabel("3 Hematíes:"))
         v_layout3.addWidget(hematies_entry3)
 
         proteinas_entry3 = QLineEdit()
         proteinas_entry3.setObjectName("3Proteinas")
         proteinas_entry3.setMaxLength(255)
-        proteinas_entry3.setFixedWidth(100)
+        proteinas_entry3.setFixedWidth(150)
         v_layout3.addWidget(QLabel("3 Proteínas:"))
         v_layout3.addWidget(proteinas_entry3)
 
         otros_entry3 = QLineEdit()
         otros_entry3.setObjectName("3Otros")
         otros_entry3.setMaxLength(255)
-        otros_entry3.setFixedWidth(100)
+        otros_entry3.setFixedWidth(150)
         v_layout3.addWidget(QLabel("3 Otros:"))
         v_layout3.addWidget(otros_entry3)
 
@@ -863,49 +887,49 @@ class ConsultaGinecologica(QWidget):
         color_entry4 = QLineEdit()
         color_entry4.setObjectName("4Color")
         color_entry4.setMaxLength(255)
-        color_entry4.setFixedWidth(100)
+        color_entry4.setFixedWidth(150)
         v_layout4.addWidget(QLabel("4 Color:"))
         v_layout4.addWidget(color_entry4)
 
         aspecto_entry4 = QLineEdit()
         aspecto_entry4.setObjectName("4Aspecto")
         aspecto_entry4.setMaxLength(255)
-        aspecto_entry4.setFixedWidth(100)
+        aspecto_entry4.setFixedWidth(150)
         v_layout4.addWidget(QLabel("4 Aspecto:"))
         v_layout4.addWidget(aspecto_entry4)
 
         densidad_entry4 = QLineEdit()
         densidad_entry4.setObjectName("4Densidad")
         densidad_entry4.setMaxLength(255)
-        densidad_entry4.setFixedWidth(100)
+        densidad_entry4.setFixedWidth(150)
         v_layout4.addWidget(QLabel("4 Densidad:"))
         v_layout4.addWidget(densidad_entry4)
 
         leucocitos_entry4 = QLineEdit()
         leucocitos_entry4.setObjectName("4Leucocitos")
         leucocitos_entry4.setMaxLength(255)
-        leucocitos_entry4.setFixedWidth(100)
+        leucocitos_entry4.setFixedWidth(150)
         v_layout4.addWidget(QLabel("4 Leucocitos:"))
         v_layout4.addWidget(leucocitos_entry4)
 
         hematies_entry4 = QLineEdit()
         hematies_entry4.setObjectName("4Hematies")
         hematies_entry4.setMaxLength(255)
-        hematies_entry4.setFixedWidth(100)
+        hematies_entry4.setFixedWidth(150)
         v_layout4.addWidget(QLabel("4 Hematíes:"))
         v_layout4.addWidget(hematies_entry4)
 
         proteinas_entry4 = QLineEdit()
         proteinas_entry4.setObjectName("4Proteinas")
         proteinas_entry4.setMaxLength(255)
-        proteinas_entry4.setFixedWidth(100)
+        proteinas_entry4.setFixedWidth(150)
         v_layout4.addWidget(QLabel("4 Proteínas:"))
         v_layout4.addWidget(proteinas_entry4)
 
         otros_entry4 = QLineEdit()
         otros_entry4.setObjectName("4Otros")
         otros_entry4.setMaxLength(255)
-        otros_entry4.setFixedWidth(100)
+        otros_entry4.setFixedWidth(150)
         v_layout4.addWidget(QLabel("4 Otros:"))
         v_layout4.addWidget(otros_entry4)
 
@@ -947,7 +971,7 @@ class ConsultaGinecologica(QWidget):
         extrapolado_para_entry1 = QLineEdit()
         extrapolado_para_entry1.setObjectName("1_Extrapolado_Para")
         extrapolado_para_entry1.setMaxLength(255)
-        extrapolado_para_entry1.setFixedWidth(100)
+        extrapolado_para_entry1.setFixedWidth(150)
         h_layout1.addWidget(QLabel("1 Extrapolado Para:"))
         h_layout1.addWidget(extrapolado_para_entry1)
 
@@ -967,7 +991,7 @@ class ConsultaGinecologica(QWidget):
         extrapolado_para_entry2 = QLineEdit()
         extrapolado_para_entry2.setObjectName("2_Extrapolado_Para")
         extrapolado_para_entry2.setMaxLength(255)
-        extrapolado_para_entry2.setFixedWidth(100)
+        extrapolado_para_entry2.setFixedWidth(150)
         h_layout2.addWidget(QLabel("2 Extrapolado Para:"))
         h_layout2.addWidget(extrapolado_para_entry2)
 
@@ -987,7 +1011,7 @@ class ConsultaGinecologica(QWidget):
         extrapolado_para_entry3 = QLineEdit()
         extrapolado_para_entry3.setObjectName("3_Extrapolado_Para")
         extrapolado_para_entry3.setMaxLength(255)
-        extrapolado_para_entry3.setFixedWidth(100)
+        extrapolado_para_entry3.setFixedWidth(150)
         h_layout3.addWidget(QLabel("3 Extrapolado Para:"))
         h_layout3.addWidget(extrapolado_para_entry3)
 
@@ -1007,7 +1031,7 @@ class ConsultaGinecologica(QWidget):
         extrapolado_para_entry4 = QLineEdit()
         extrapolado_para_entry4.setObjectName("4_Extrapolado_Para")
         extrapolado_para_entry4.setMaxLength(255)
-        extrapolado_para_entry4.setFixedWidth(100)
+        extrapolado_para_entry4.setFixedWidth(150)
         h_layout4.addWidget(QLabel("4 Extrapolado Para:"))
         h_layout4.addWidget(extrapolado_para_entry4)
 
@@ -1027,7 +1051,7 @@ class ConsultaGinecologica(QWidget):
         extrapolado_para_entry5 = QLineEdit()
         extrapolado_para_entry5.setObjectName("5_Extrapolado_Para")
         extrapolado_para_entry5.setMaxLength(255)
-        extrapolado_para_entry5.setFixedWidth(100)
+        extrapolado_para_entry5.setFixedWidth(150)
         h_layout5.addWidget(QLabel("5 Extrapolado Para:"))
         h_layout5.addWidget(extrapolado_para_entry5)
 
@@ -1062,9 +1086,6 @@ class ConsultaGinecologica(QWidget):
         # Ajustar el tamaño de la tabla para que sea completamente visible
         self.radiocefalopelvimetria_table.setFixedHeight(160)
         self.radiocefalopelvimetria_table.setFixedWidth(480)
-        #self.laboratorio_table.setFixedHeight(self.laboratorio_table.verticalHeader().length() + self.laboratorio_table.horizontalHeader().height())
-        #self.laboratorio_table.setFixedWidth(self.laboratorio_table.horizontalHeader().length())
-
 
         # Añadir la tabla al layout de "Radiocefalopelvimetría"
         radiocefalopelvimetria_layout.addWidget(self.radiocefalopelvimetria_table)
@@ -1251,6 +1272,8 @@ class ConsultaGinecologica(QWidget):
         self.fpp_entry.clear()
         self.motivo_consulta_entry.clear()
         self.enfermedad_actual_entry.clear()
+        self.antecedentes_personales_entry.clear()        
+        self.antecedentes_familiares_entry.clear()        
         self.menarquia_entry.clear()
         self.ciclo_entry.clear()
         self.tipo_entry.clear()
@@ -1435,8 +1458,6 @@ class ConsultaGinecologica(QWidget):
                     self.parentesco_entry.setText(paciente[16])
                     self.direccion_entry.setText(paciente[10])
 
-                    QMessageBox.information(self, "Información", "Datos del paciente cargados exitosamente.")
-
                     # Verificar si existe en consultaginecologica y cargar los datos
                     self.cargar_datos_consulta_ginecologica(cedula)
                 else:
@@ -1470,101 +1491,103 @@ class ConsultaGinecologica(QWidget):
                 self.fpp_entry.setText(consulta[8] or "")
                 self.motivo_consulta_entry.setText(consulta[9] or "")
                 self.enfermedad_actual_entry.setText(consulta[10] or "")
-                self.menarquia_entry.setText(consulta[11] or "")
-                self.ciclo_entry.setText(consulta[12] or "")
-                self.tipo_entry.setText(consulta[13] or "")
-                self.prs_entry.setText(consulta[14] or "")
-                self.ps_entry.setText(consulta[15] or "")
-                self.menopausia_entry.setText(consulta[16] or "")
-                self.anticonceptivo_entry.setText(consulta[17] or "")
-                self.ets_entry.setText(consulta[18] or "")
-                self.planificado_entry.setCurrentText(consulta[19] or "N/A")
-                self.deseado_entry.setCurrentText(consulta[20] or "N/A")
-                self.aceptado_entry.setCurrentText(consulta[21] or "N/A")
-                self.inicio_entry.setText(consulta[22] or "")
-                self.sg_entry.setText(consulta[23] or "")
-                self.pub_entry.setText(consulta[24] or "")
-                self.tab_entry.setText(consulta[25] or "")
-                self.privada_entry.setText(consulta[26] or "")
-                self.gp_entry.setText(consulta[27] or "")
-                self.complicaciones_entry.setText(consulta[28] or "")
-                self.inductores_entry.setText(consulta[29] or "")
-                self.toxoide_entry.setText(consulta[30] or "")
-                self.general_entry.setText(consulta[31] or "")
-                self.fc_entry.setText(consulta[32] or "")
-                self.fr_entry.setText(consulta[33] or "")
-                self.pa_entry.setText(consulta[34] or "")
-                self.tem_entry.setText(consulta[35] or "")
-                self.t_entry.setText(consulta[36] or "")
-                self.p1_entry.setText(consulta[37] or "")
-                self.imc_entry.setText(consulta[38] or "")
-                self.mamas_entry.setText(consulta[39] or "")
-                self.cardio_pulmonar_entry.setText(consulta[40] or "")
-                self.abdomen_entry.setText(consulta[41] or "")
-                self.genitales_entry.setText(consulta[42] or "")
-                self.tacto_entry.setText(consulta[43] or "")
-                self.especulo_entry.setText(consulta[44] or "")
-                self.extremidades_entry.setText(consulta[45] or "")
-                self.neurologico_entry.setText(consulta[46] or "")
-                self.diagnostico_admision_entry.setText(consulta[47] or "")
-                self.comentarios_entry.setText(consulta[48] or "")
+                self.antecedentes_personales_entry.setText(consulta[11] or "")
+                self.antecedentes_familiares_entry.setText(consulta[12] or "")
+                self.menarquia_entry.setText(consulta[13] or "")
+                self.ciclo_entry.setText(consulta[14] or "")
+                self.tipo_entry.setText(consulta[15] or "")
+                self.prs_entry.setText(consulta[16] or "")
+                self.ps_entry.setText(consulta[17] or "")
+                self.menopausia_entry.setText(consulta[18] or "")
+                self.anticonceptivo_entry.setText(consulta[19] or "")
+                self.ets_entry.setText(consulta[20] or "")
+                self.planificado_entry.setCurrentText(consulta[21] or "N/A")
+                self.deseado_entry.setCurrentText(consulta[22] or "N/A")
+                self.aceptado_entry.setCurrentText(consulta[23] or "N/A")
+                self.inicio_entry.setText(consulta[24] or "")
+                self.sg_entry.setText(consulta[25] or "")
+                self.pub_entry.setText(consulta[26] or "")
+                self.tab_entry.setText(consulta[27] or "")
+                self.privada_entry.setText(consulta[28] or "")
+                self.gp_entry.setText(consulta[29] or "")
+                self.complicaciones_entry.setText(consulta[30] or "")
+                self.inductores_entry.setText(consulta[31] or "")
+                self.toxoide_entry.setText(consulta[32] or "")
+                self.general_entry.setText(consulta[33] or "")
+                self.fc_entry.setText(consulta[34] or "")
+                self.fr_entry.setText(consulta[35] or "")
+                self.pa_entry.setText(consulta[36] or "")
+                self.tem_entry.setText(consulta[37] or "")
+                self.t_entry.setText(consulta[38] or "")
+                self.p1_entry.setText(consulta[39] or "")
+                self.imc_entry.setText(consulta[40] or "")
+                self.mamas_entry.setText(consulta[41] or "")
+                self.cardio_pulmonar_entry.setText(consulta[42] or "")
+                self.abdomen_entry.setText(consulta[43] or "")
+                self.genitales_entry.setText(consulta[44] or "")
+                self.tacto_entry.setText(consulta[45] or "")
+                self.especulo_entry.setText(consulta[46] or "")
+                self.extremidades_entry.setText(consulta[47] or "")
+                self.neurologico_entry.setText(consulta[48] or "")
+                self.diagnostico_admision_entry.setText(consulta[49] or "")
+                self.comentarios_entry.setText(consulta[50] or "")
 
                 # Citologia
-                cfecha1 = QDate.fromString(consulta[49], "yyyy-MM-dd") if consulta[49] else QDate.currentDate()
+                cfecha1 = QDate.fromString(consulta[51], "yyyy-MM-dd") if consulta[51] else QDate.currentDate()
                 self.citologia_widget.findChild(QDateEdit, "1CFECHA").setDate(cfecha1)
-                self.citologia_widget.findChild(QLineEdit, "1RN").setText(consulta[50] or "")
-                self.citologia_widget.findChild(QLineEdit, "1G_MF").setText(consulta[51] or "")
-                self.citologia_widget.findChild(QLineEdit, "1PAM").setText(consulta[52] or "")
-                self.citologia_widget.findChild(QLineEdit, "1TAN").setText(consulta[53] or "")
+                self.citologia_widget.findChild(QLineEdit, "1RN").setText(consulta[52] or "")
+                self.citologia_widget.findChild(QLineEdit, "1G_MF").setText(consulta[53] or "")
+                self.citologia_widget.findChild(QLineEdit, "1PAM").setText(consulta[54] or "")
+                self.citologia_widget.findChild(QLineEdit, "1TAN").setText(consulta[55] or "")
 
-                cfecha2 = QDate.fromString(consulta[54], "yyyy-MM-dd") if consulta[54] else QDate.currentDate()
+                cfecha2 = QDate.fromString(consulta[56], "yyyy-MM-dd") if consulta[56] else QDate.currentDate()
                 self.citologia_widget.findChild(QDateEdit, "2CFECHA").setDate(cfecha2)
-                self.citologia_widget.findChild(QLineEdit, "2RN").setText(consulta[55] or "")
-                self.citologia_widget.findChild(QLineEdit, "2G_MF").setText(consulta[56] or "")
-                self.citologia_widget.findChild(QLineEdit, "2PAM").setText(consulta[57] or "")
-                self.citologia_widget.findChild(QLineEdit, "2TAN").setText(consulta[58] or "")
+                self.citologia_widget.findChild(QLineEdit, "2RN").setText(consulta[57] or "")
+                self.citologia_widget.findChild(QLineEdit, "2G_MF").setText(consulta[58] or "")
+                self.citologia_widget.findChild(QLineEdit, "2PAM").setText(consulta[59] or "")
+                self.citologia_widget.findChild(QLineEdit, "2TAN").setText(consulta[60] or "")
 
-                cfecha3 = QDate.fromString(consulta[59], "yyyy-MM-dd") if consulta[59] else QDate.currentDate()
+                cfecha3 = QDate.fromString(consulta[61], "yyyy-MM-dd") if consulta[61] else QDate.currentDate()
                 self.citologia_widget.findChild(QDateEdit, "3CFECHA").setDate(cfecha3)
-                self.citologia_widget.findChild(QLineEdit, "3RN").setText(consulta[60] or "")
-                self.citologia_widget.findChild(QLineEdit, "3G_MF").setText(consulta[61] or "")
-                self.citologia_widget.findChild(QLineEdit, "3PAM").setText(consulta[62] or "")
-                self.citologia_widget.findChild(QLineEdit, "3TAN").setText(consulta[63] or "")
+                self.citologia_widget.findChild(QLineEdit, "3RN").setText(consulta[62] or "")
+                self.citologia_widget.findChild(QLineEdit, "3G_MF").setText(consulta[63] or "")
+                self.citologia_widget.findChild(QLineEdit, "3PAM").setText(consulta[64] or "")
+                self.citologia_widget.findChild(QLineEdit, "3TAN").setText(consulta[65] or "")
 
-                cfecha4 = QDate.fromString(consulta[64], "yyyy-MM-dd") if consulta[64] else QDate.currentDate()
+                cfecha4 = QDate.fromString(consulta[66], "yyyy-MM-dd") if consulta[66] else QDate.currentDate()
                 self.citologia_widget.findChild(QDateEdit, "4CFECHA").setDate(cfecha4)
-                self.citologia_widget.findChild(QLineEdit, "4RN").setText(consulta[65] or "")
-                self.citologia_widget.findChild(QLineEdit, "4G_MF").setText(consulta[66] or "")
-                self.citologia_widget.findChild(QLineEdit, "4PAM").setText(consulta[67] or "")
-                self.citologia_widget.findChild(QLineEdit, "4TAN").setText(consulta[68] or "")
+                self.citologia_widget.findChild(QLineEdit, "4RN").setText(consulta[67] or "")
+                self.citologia_widget.findChild(QLineEdit, "4G_MF").setText(consulta[68] or "")
+                self.citologia_widget.findChild(QLineEdit, "4PAM").setText(consulta[69] or "")
+                self.citologia_widget.findChild(QLineEdit, "4TAN").setText(consulta[70] or "")
 
-                cfecha5 = QDate.fromString(consulta[69], "yyyy-MM-dd") if consulta[69] else QDate.currentDate()
+                cfecha5 = QDate.fromString(consulta[71], "yyyy-MM-dd") if consulta[71] else QDate.currentDate()
                 self.citologia_widget.findChild(QDateEdit, "5CFECHA").setDate(cfecha5)
-                self.citologia_widget.findChild(QLineEdit, "5RN").setText(consulta[70] or "")
-                self.citologia_widget.findChild(QLineEdit, "5G_MF").setText(consulta[71] or "")
-                self.citologia_widget.findChild(QLineEdit, "5PAM").setText(consulta[72] or "")
-                self.citologia_widget.findChild(QLineEdit, "5TAN").setText(consulta[73] or "")
+                self.citologia_widget.findChild(QLineEdit, "5RN").setText(consulta[72] or "")
+                self.citologia_widget.findChild(QLineEdit, "5G_MF").setText(consulta[73] or "")
+                self.citologia_widget.findChild(QLineEdit, "5PAM").setText(consulta[74] or "")
+                self.citologia_widget.findChild(QLineEdit, "5TAN").setText(consulta[75] or "")
 
                 # Laboratorio
-                tipiaje_values = consulta[74].split("-") if consulta[74] else []
-                hiv_values = consulta[75].split("-") if consulta[75] else []
-                vdrl_values = consulta[76].split("-") if consulta[76] else []
-                toxo_test_values = consulta[77].split("-") if consulta[77] else []
-                tp_values = consulta[78].split("-") if consulta[78] else []
-                tpt_values = consulta[79].split("-") if consulta[79] else []
-                wbc_values = consulta[80].split("-") if consulta[80] else []
-                linf_values = consulta[81].split("-") if consulta[81] else []
-                gran_values = consulta[82].split("-") if consulta[82] else []
-                hb_values = consulta[83].split("-") if consulta[83] else []
-                hct_values = consulta[84].split("-") if consulta[84] else []
-                plt_values = consulta[85].split("-") if consulta[85] else []
-                glicemia_values = consulta[86].split("-") if consulta[86] else []
-                urea_values = consulta[87].split("-") if consulta[87] else []
-                creat_values = consulta[88].split("-") if consulta[88] else []
-                bil_total_values = consulta[89].split("-") if consulta[89] else []
-                ldh_values = consulta[90].split("-") if consulta[90] else []
-                tgo_values = consulta[91].split("-") if consulta[91] else []
-                tgp_values = consulta[92].split("-") if consulta[92] else []
+                tipiaje_values = consulta[76].split("-") if consulta[76] else []
+                hiv_values = consulta[77].split("-") if consulta[77] else []
+                vdrl_values = consulta[78].split("-") if consulta[78] else []
+                toxo_test_values = consulta[79].split("-") if consulta[79] else []
+                tp_values = consulta[80].split("-") if consulta[80] else []
+                tpt_values = consulta[81].split("-") if consulta[81] else []
+                wbc_values = consulta[82].split("-") if consulta[82] else []
+                linf_values = consulta[83].split("-") if consulta[83] else []
+                gran_values = consulta[84].split("-") if consulta[84] else []
+                hb_values = consulta[85].split("-") if consulta[85] else []
+                hct_values = consulta[86].split("-") if consulta[86] else []
+                plt_values = consulta[87].split("-") if consulta[87] else []
+                glicemia_values = consulta[88].split("-") if consulta[88] else []
+                urea_values = consulta[89].split("-") if consulta[89] else []
+                creat_values = consulta[90].split("-") if consulta[90] else []
+                bil_total_values = consulta[91].split("-") if consulta[91] else []
+                ldh_values = consulta[92].split("-") if consulta[92] else []
+                tgo_values = consulta[93].split("-") if consulta[93] else []
+                tgp_values = consulta[94].split("-") if consulta[94] else []
 
                 for i in range(self.laboratorio_table.columnCount()):
                     if i < len(tipiaje_values):
@@ -1626,80 +1649,94 @@ class ConsultaGinecologica(QWidget):
                         self.laboratorio_table.setItem(18, i, item)
 
                 # Uroanalisis
-                self.uroanalisis_widget.findChild(QLineEdit, "1Color").setText(consulta[93] or "")
-                self.uroanalisis_widget.findChild(QLineEdit, "1Aspecto").setText(consulta[94] or "")
-                self.uroanalisis_widget.findChild(QLineEdit, "1Densidad").setText(consulta[95] or "")
-                self.uroanalisis_widget.findChild(QLineEdit, "1Leucocitos").setText(consulta[96] or "")
-                self.uroanalisis_widget.findChild(QLineEdit, "1Hematies").setText(consulta[97] or "")
-                self.uroanalisis_widget.findChild(QLineEdit, "1Proteinas").setText(consulta[98] or "")
-                self.uroanalisis_widget.findChild(QLineEdit, "1Otros").setText(consulta[99] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "1Color").setText(consulta[95] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "1Aspecto").setText(consulta[96] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "1Densidad").setText(consulta[97] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "1Leucocitos").setText(consulta[98] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "1Hematies").setText(consulta[99] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "1Proteinas").setText(consulta[100] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "1Otros").setText(consulta[101] or "")
 
-                self.uroanalisis_widget.findChild(QLineEdit, "2Color").setText(consulta[100] or "")
-                self.uroanalisis_widget.findChild(QLineEdit, "2Aspecto").setText(consulta[101] or "")
-                self.uroanalisis_widget.findChild(QLineEdit, "2Densidad").setText(consulta[102] or "")
-                self.uroanalisis_widget.findChild(QLineEdit, "2Leucocitos").setText(consulta[103] or "")
-                self.uroanalisis_widget.findChild(QLineEdit, "2Hematies").setText(consulta[104] or "")
-                self.uroanalisis_widget.findChild(QLineEdit, "2Proteinas").setText(consulta[105] or "")
-                self.uroanalisis_widget.findChild(QLineEdit, "2Otros").setText(consulta[106] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "2Color").setText(consulta[102] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "2Aspecto").setText(consulta[103] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "2Densidad").setText(consulta[104] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "2Leucocitos").setText(consulta[105] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "2Hematies").setText(consulta[106] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "2Proteinas").setText(consulta[107] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "2Otros").setText(consulta[108] or "")
 
-                self.uroanalisis_widget.findChild(QLineEdit, "3Color").setText(consulta[107] or "")
-                self.uroanalisis_widget.findChild(QLineEdit, "3Aspecto").setText(consulta[108] or "")
-                self.uroanalisis_widget.findChild(QLineEdit, "3Densidad").setText(consulta[109] or "")
-                self.uroanalisis_widget.findChild(QLineEdit, "3Leucocitos").setText(consulta[110] or "")
-                self.uroanalisis_widget.findChild(QLineEdit, "3Hematies").setText(consulta[111] or "")
-                self.uroanalisis_widget.findChild(QLineEdit, "3Proteinas").setText(consulta[112] or "")
-                self.uroanalisis_widget.findChild(QLineEdit, "3Otros").setText(consulta[113] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "3Color").setText(consulta[109] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "3Aspecto").setText(consulta[110] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "3Densidad").setText(consulta[111] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "3Leucocitos").setText(consulta[112] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "3Hematies").setText(consulta[113] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "3Proteinas").setText(consulta[114] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "3Otros").setText(consulta[115] or "")
 
-                self.uroanalisis_widget.findChild(QLineEdit, "4Color").setText(consulta[114] or "")
-                self.uroanalisis_widget.findChild(QLineEdit, "4Aspecto").setText(consulta[115] or "")
-                self.uroanalisis_widget.findChild(QLineEdit, "4Densidad").setText(consulta[116] or "")
-                self.uroanalisis_widget.findChild(QLineEdit, "4Leucocitos").setText(consulta[117] or "")
-                self.uroanalisis_widget.findChild(QLineEdit, "4Hematies").setText(consulta[118] or "")
-                self.uroanalisis_widget.findChild(QLineEdit, "4Proteinas").setText(consulta[119] or "")
-                self.uroanalisis_widget.findChild(QLineEdit, "4Otros").setText(consulta[120] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "4Color").setText(consulta[116] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "4Aspecto").setText(consulta[117] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "4Densidad").setText(consulta[118] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "4Leucocitos").setText(consulta[119] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "4Hematies").setText(consulta[120] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "4Proteinas").setText(consulta[121] or "")
+                self.uroanalisis_widget.findChild(QLineEdit, "4Otros").setText(consulta[122] or "")
 
                 # Ecosonograma
-                fecha_edad_gestacional1 = QDate.fromString(consulta[121], "yyyy-MM-dd") if consulta[121] else QDate.currentDate()
+                fecha_edad_gestacional1 = QDate.fromString(consulta[123], "yyyy-MM-dd") if consulta[123] else QDate.currentDate()
                 self.ecosonograma_widget.findChild(QDateEdit, "1_Fecha_Edad_Gestacional").setDate(fecha_edad_gestacional1)
-                self.ecosonograma_widget.findChild(QLineEdit, "1_Extrapolado_Para").setText(consulta[122] or "")
+                self.ecosonograma_widget.findChild(QLineEdit, "1_Extrapolado_Para").setText(consulta[124] or "")
 
-                fecha_edad_gestacional2 = QDate.fromString(consulta[123], "yyyy-MM-dd") if consulta[123] else QDate.currentDate()
+                fecha_edad_gestacional2 = QDate.fromString(consulta[125], "yyyy-MM-dd") if consulta[125] else QDate.currentDate()
                 self.ecosonograma_widget.findChild(QDateEdit, "2_Fecha_Edad_Gestacional").setDate(fecha_edad_gestacional2)
-                self.ecosonograma_widget.findChild(QLineEdit, "2_Extrapolado_Para").setText(consulta[124] or "")
+                self.ecosonograma_widget.findChild(QLineEdit, "2_Extrapolado_Para").setText(consulta[126] or "")
 
-                fecha_edad_gestacional3 = QDate.fromString(consulta[125], "yyyy-MM-dd") if consulta[125] else QDate.currentDate()
+                fecha_edad_gestacional3 = QDate.fromString(consulta[127], "yyyy-MM-dd") if consulta[127] else QDate.currentDate()
                 self.ecosonograma_widget.findChild(QDateEdit, "3_Fecha_Edad_Gestacional").setDate(fecha_edad_gestacional3)
-                self.ecosonograma_widget.findChild(QLineEdit, "3_Extrapolado_Para").setText(consulta[126] or "")
+                self.ecosonograma_widget.findChild(QLineEdit, "3_Extrapolado_Para").setText(consulta[128] or "")
 
-                fecha_edad_gestacional4 = QDate.fromString(consulta[127], "yyyy-MM-dd") if consulta[127] else QDate.currentDate()
+                fecha_edad_gestacional4 = QDate.fromString(consulta[129], "yyyy-MM-dd") if consulta[129] else QDate.currentDate()
                 self.ecosonograma_widget.findChild(QDateEdit, "4_Fecha_Edad_Gestacional").setDate(fecha_edad_gestacional4)
-                self.ecosonograma_widget.findChild(QLineEdit, "4_Extrapolado_Para").setText(consulta[128] or "")
+                self.ecosonograma_widget.findChild(QLineEdit, "4_Extrapolado_Para").setText(consulta[130] or "")
 
-                fecha_edad_gestacional5 = QDate.fromString(consulta[129], "yyyy-MM-dd") if consulta[129] else QDate.currentDate()
+                fecha_edad_gestacional5 = QDate.fromString(consulta[131], "yyyy-MM-dd") if consulta[131] else QDate.currentDate()
                 self.ecosonograma_widget.findChild(QDateEdit, "5_Fecha_Edad_Gestacional").setDate(fecha_edad_gestacional5)
-                self.ecosonograma_widget.findChild(QLineEdit, "5_Extrapolado_Para").setText(consulta[130] or "")
+                self.ecosonograma_widget.findChild(QLineEdit, "5_Extrapolado_Para").setText(consulta[132] or "")
 
                 # Radiocefalopelvimetria
-                diametro_values = consulta[131].split("-") if consulta[131] else []
-                estrecho_superior_values = consulta[132].split("-") if consulta[132] else []
-                estrecho_medio_values = consulta[133].split("-") if consulta[133] else []
-                estrecho_inferior_values = consulta[134].split("-") if consulta[134] else []
+                diametro_values = consulta[133].split("-") if consulta[133] else []
+                estrecho_superior_values = consulta[134].split("-") if consulta[134] else []
+                estrecho_medio_values = consulta[135].split("-") if consulta[135] else []
+                estrecho_inferior_values = consulta[136].split("-") if consulta[136] else []
 
-                for i in range(self.radiocefalopelvimetria_table.columnCount()):
-                    if i < len(diametro_values):
-                        item = QTableWidgetItem(diametro_values[i])
-                        self.radiocefalopelvimetria_table.setItem(0, i, item)
-                    if i < len(estrecho_superior_values):
-                        item = QTableWidgetItem(estrecho_superior_values[i])
-                        self.radiocefalopelvimetria_table.setItem(1, i, item)
-                    if i < len(estrecho_medio_values):
-                        item = QTableWidgetItem(estrecho_medio_values[i])
-                        self.radiocefalopelvimetria_table.setItem(2, i, item)
-                    if i < len(estrecho_inferior_values):
-                        item = QTableWidgetItem(estrecho_inferior_values[i])
-                        self.radiocefalopelvimetria_table.setItem(3, i, item)
+                # Cargar los valores en la tabla
+                if len(diametro_values) == 3:
+                    self.radiocefalopelvimetria_table.setItem(0, 0, QTableWidgetItem(diametro_values[0]))  # AP
+                    self.radiocefalopelvimetria_table.setItem(1, 0, QTableWidgetItem(diametro_values[1]))  # Transverso
+                    self.radiocefalopelvimetria_table.setItem(2, 0, QTableWidgetItem(diametro_values[2]))  # Oblicuo
 
-                QMessageBox.information(self, "Información", "Datos de la consulta ginecológica cargados exitosamente.")
+                if len(estrecho_superior_values) == 3:
+                    self.radiocefalopelvimetria_table.setItem(0, 1, QTableWidgetItem(estrecho_superior_values[0]))  # AP
+                    self.radiocefalopelvimetria_table.setItem(1, 1, QTableWidgetItem(estrecho_superior_values[1]))  # Transverso
+                    self.radiocefalopelvimetria_table.setItem(2, 1, QTableWidgetItem(estrecho_superior_values[2]))  # Oblicuo
+
+                if len(estrecho_medio_values) == 3:
+                    self.radiocefalopelvimetria_table.setItem(0, 2, QTableWidgetItem(estrecho_medio_values[0]))  # AP
+                    self.radiocefalopelvimetria_table.setItem(1, 2, QTableWidgetItem(estrecho_medio_values[1]))  # Transverso
+                    self.radiocefalopelvimetria_table.setItem(2, 2, QTableWidgetItem(estrecho_medio_values[2]))  # Oblicuo
+
+                if len(estrecho_inferior_values) == 3:
+                    self.radiocefalopelvimetria_table.setItem(0, 3, QTableWidgetItem(estrecho_inferior_values[0]))  # AP
+                    self.radiocefalopelvimetria_table.setItem(1, 3, QTableWidgetItem(estrecho_inferior_values[1]))  # Transverso
+                    self.radiocefalopelvimetria_table.setItem(2, 3, QTableWidgetItem(estrecho_inferior_values[2]))  # Oblicuo
+                
+                # Extraer fecha y hora anterior
+                fecha_anterior = consulta[137]  # Asumiendo que la fecha está en la columna 137
+                hora_anterior = consulta[138]   # Asumiendo que la hora está en la columna 138
+                
+                # Guardar fecha y hora anterior en atributos de la clase
+                self.fecha_anterior = fecha_anterior
+                self.hora_anterior = hora_anterior
+
             else:
                 QMessageBox.information(self, "Información", "No se encontró ninguna consulta ginecológica para esta cédula.")
 
@@ -1757,6 +1794,14 @@ class ConsultaGinecologica(QWidget):
             self.citologia_button.setArrowType(Qt.RightArrow)
             self.citologia_widget.setVisible(False)
 
+    def toggle_antecedentes_gineco_obstetricos(self):
+        if self.antecedentes_gineco_obstetricos_button.isChecked():
+            self.antecedentes_gineco_obstetricos_button.setArrowType(Qt.DownArrow)
+            self.antecedentes_gineco_obstetricos_widget.setVisible(True)
+        else:
+            self.antecedentes_gineco_obstetricos_button.setArrowType(Qt.RightArrow)
+            self.antecedentes_gineco_obstetricos_widget.setVisible(False)
+
     def save_data(self):
         # Obtener los datos de los campos
         cedula = self.cedula_entry.text()
@@ -1776,6 +1821,42 @@ class ConsultaGinecologica(QWidget):
         parentesco = self.parentesco_entry.text()
         direccion = self.direccion_entry.text()
 
+        # Validar campos obligatorios de la tabla pacientes
+        campos_vacios = []
+        if not cedula:
+            campos_vacios.append("Cédula")
+        if not primer_nombre:
+            campos_vacios.append("Primer Nombre")
+        if not primer_apellido:
+            campos_vacios.append("Primer Apellido")
+        if not fecha_nacimiento:
+            campos_vacios.append("Fecha de Nacimiento")
+        if not telefono:
+            campos_vacios.append("Teléfono")
+        if genero == "Seleccione":
+            campos_vacios.append("Género")
+        if estado_civil == "Seleccione":
+            campos_vacios.append("Estado Civil")
+        if nacionalidad == "Seleccione":
+            campos_vacios.append("Nacionalidad")
+        if not lugar_nacimiento:
+            campos_vacios.append("Lugar de Nacimiento")
+        if not profesion_ocupacion:
+            campos_vacios.append("Profesión/Ocupación")
+        if not nombre_apellido_emergencia:
+            campos_vacios.append("Familiar de Emergencia")
+        if not telefono_emergencia:
+            campos_vacios.append("Teléfono de Emergencia")
+        if not parentesco:
+            campos_vacios.append("Parentesco")
+        if not direccion:
+            campos_vacios.append("Dirección")
+
+        if campos_vacios:
+            mensaje = "Por favor, complete los siguientes campos obligatorios:\n" + "\n".join(campos_vacios)
+            QMessageBox.warning(self, "Advertencia", mensaje)
+            return
+
         # Datos para la tabla consultaginecologica
         g = self.g_entry.text()
         p = self.p_entry.text()
@@ -1786,6 +1867,8 @@ class ConsultaGinecologica(QWidget):
         fpp = self.fpp_entry.text()
         motivo_consulta = self.motivo_consulta_entry.toPlainText()
         enfermedad_actual = self.enfermedad_actual_entry.toPlainText()
+        antecedentes_personales = self.antecedentes_personales_entry.toPlainText()
+        antecedentes_familiares = self.antecedentes_familiares_entry.toPlainText()
         menarquia = self.menarquia_entry.text()
         ciclo = self.ciclo_entry.text()
         tipo = self.tipo_entry.text()
@@ -1927,14 +2010,35 @@ class ConsultaGinecologica(QWidget):
         otros4 = self.uroanalisis_widget.findChild(QLineEdit, "4Otros").text()
 
         # Obtener los datos de la tabla de Radiocefalopelvimetría
-        diametro = "-".join([self.radiocefalopelvimetria_table.item(0, i).text() if self.radiocefalopelvimetria_table.item(0, i) else "" for i in range(self.radiocefalopelvimetria_table.columnCount())])
-        estrecho_superior = "-".join([self.radiocefalopelvimetria_table.item(1, i).text() if self.radiocefalopelvimetria_table.item(1, i) else "" for i in range(self.radiocefalopelvimetria_table.columnCount())])
-        estrecho_medio = "-".join([self.radiocefalopelvimetria_table.item(2, i).text() if self.radiocefalopelvimetria_table.item(2, i) else "" for i in range(self.radiocefalopelvimetria_table.columnCount())])
-        estrecho_inferior = "-".join([self.radiocefalopelvimetria_table.item(3, i).text() if self.radiocefalopelvimetria_table.item(3, i) else "" for i in range(self.radiocefalopelvimetria_table.columnCount())])
+        diametro_ap = self.radiocefalopelvimetria_table.item(0, 0).text() if self.radiocefalopelvimetria_table.item(0, 0) else ""
+        diametro_transverso = self.radiocefalopelvimetria_table.item(1, 0).text() if self.radiocefalopelvimetria_table.item(1, 0) else ""
+        diametro_oblicuo = self.radiocefalopelvimetria_table.item(2, 0).text() if self.radiocefalopelvimetria_table.item(2, 0) else ""
+        diametro = f"{diametro_ap}-{diametro_transverso}-{diametro_oblicuo}"
+
+        estrecho_superior_ap = self.radiocefalopelvimetria_table.item(0, 1).text() if self.radiocefalopelvimetria_table.item(0, 1) else ""
+        estrecho_superior_transverso = self.radiocefalopelvimetria_table.item(1, 1).text() if self.radiocefalopelvimetria_table.item(1, 1) else ""
+        estrecho_superior_oblicuo = self.radiocefalopelvimetria_table.item(2, 1).text() if self.radiocefalopelvimetria_table.item(2, 1) else ""
+        estrecho_superior = f"{estrecho_superior_ap}-{estrecho_superior_transverso}-{estrecho_superior_oblicuo}"
+
+        estrecho_medio_ap = self.radiocefalopelvimetria_table.item(0, 2).text() if self.radiocefalopelvimetria_table.item(0, 2) else ""
+        estrecho_medio_transverso = self.radiocefalopelvimetria_table.item(1, 2).text() if self.radiocefalopelvimetria_table.item(1, 2) else ""
+        estrecho_medio_oblicuo = self.radiocefalopelvimetria_table.item(2, 2).text() if self.radiocefalopelvimetria_table.item(2, 2) else ""
+        estrecho_medio = f"{estrecho_medio_ap}-{estrecho_medio_transverso}-{estrecho_medio_oblicuo}"
+
+        estrecho_inferior_ap = self.radiocefalopelvimetria_table.item(0, 3).text() if self.radiocefalopelvimetria_table.item(0, 3) else ""
+        estrecho_inferior_transverso = self.radiocefalopelvimetria_table.item(1, 3).text() if self.radiocefalopelvimetria_table.item(1, 3) else ""
+        estrecho_inferior_oblicuo = self.radiocefalopelvimetria_table.item(2, 3).text() if self.radiocefalopelvimetria_table.item(2, 3) else ""
+        estrecho_inferior = f"{estrecho_inferior_ap}-{estrecho_inferior_transverso}-{estrecho_inferior_oblicuo}"
 
         # Obtener la fecha y hora actual
         fecha_actual = QDate.currentDate().toString("yyyy-MM-dd")
         hora_actual = QTime.currentTime().toString("hh:mm:ss")
+
+        # Combinar la fecha y hora anterior con la actual
+        if hasattr(self, 'fecha_anterior') and self.fecha_anterior:
+            fecha_actual = f"{fecha_actual} - {self.fecha_anterior}"
+        if hasattr(self, 'hora_anterior') and self.hora_anterior:
+            hora_actual = f"{hora_actual} - {self.hora_anterior}"
 
         # Conectar a la base de datos y guardar los datos
         db = CreateConnection()
@@ -1946,72 +2050,147 @@ class ConsultaGinecologica(QWidget):
         cursor = connection.cursor()
 
         try:
-            # Insertar datos en la tabla pacientes
-            cursor.execute("""
-                INSERT INTO pacientes (cedula, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, fecha_nacimiento, telefono, genero, estado_civil, nacionalidad, lugar_nacimiento, profesion_ocupacion, nombre_apellido_emergencia, telefono_emergencia, parentesco, direccion)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-            """, (cedula, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, fecha_nacimiento, telefono, genero, estado_civil, nacionalidad, lugar_nacimiento, profesion_ocupacion, nombre_apellido_emergencia, telefono_emergencia, parentesco, direccion))
+            # Verificar si el paciente ya existe en la tabla pacientes
+            cursor.execute("SELECT cedula FROM pacientes WHERE cedula = %s", (cedula,))
+            paciente_existe = cursor.fetchone()
 
-            # Insertar datos en la tabla consultaginecologica
-            cursor.execute("""
-                INSERT INTO consultaginecologica (paciente_cedula, g, p, a, e, m, fur, fpp, motivo_consulta, enfermedad_actual, menarquia, ciclo, tipo, prs, ps, menopausia, anticonceptivo, ets, planificado, deseado, aceptado, inicio, sg, pub, tab, privada, gp, complicaciones, inductores, toxoide, general, fc, fr, pa, tem, t, p1, imc, mamas, cardio_pulmonar, abdomen, genitales, tacto, especulo, extremidades, neurologico, diagnostico_ingreso, comentarios,
-                    1cfecha, 1rn, 1g_mf, 1pam, 1tan,
-                    2cfecha, 2rn, 2g_mf, 2pam, 2tan,
-                    3cfecha, 3rn, 3g_mf, 3pam, 3tan,
-                    4cfecha, 4rn, 4g_mf, 4pam, 4tan,
-                    5cfecha, 5rn, 5g_mf, 5pam, 5tan,
-                    tipiaje, hiv, vdrl, toxo_test, tp, tpt, wbc, linf, gran, hb, hct, plt, glicemia, urea, creat, bil_total, ldh, tgo, tgp,
-                    1color, 1aspecto, 1densidad, 1leucocitos, 1hematies, 1proteinas, 1otros,
-                    2color, 2aspecto, 2densidad, 2leucocitos, 2hematies, 2proteinas, 2otros,
-                    3color, 3aspecto, 3densidad, 3leucocitos, 3hematies, 3proteinas, 3otros,
-                    4color, 4aspecto, 4densidad, 4leucocitos, 4hematies, 4proteinas, 4otros,
-                    1fecha_edad_gestacional, 1extrapolado_para,
-                    2fecha_edad_gestacional, 2extrapolado_para,
-                    3fecha_edad_gestacional, 3extrapolado_para,
-                    4fecha_edad_gestacional, 4extrapolado_para,
-                    5fecha_edad_gestacional, 5extrapolado_para,
-                    diametro, estrecho_superior, estrecho_medio, estrecho_inferior,
-                    fecha, hora)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-                       %s, %s, %s, %s, %s,
-                       %s, %s, %s, %s, %s,
-                       %s, %s, %s, %s, %s,
-                       %s, %s, %s, %s, %s,
-                       %s, %s, %s, %s, %s,
-                       %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-                       %s, %s, %s, %s, %s, %s, %s,
-                       %s, %s, %s, %s, %s, %s, %s,
-                       %s, %s, %s, %s, %s, %s, %s,
-                       %s, %s, %s, %s, %s, %s, %s,
-                       %s, %s,
-                       %s, %s,
-                       %s, %s,
-                       %s, %s,
-                       %s, %s,
-                       %s, %s, %s, %s, %s, %s)
-            """, (cedula, g, p, a, e, m, fur, fpp, motivo_consulta, enfermedad_actual, menarquia, ciclo, tipo, prs, ps, menopausia, anticonceptivo, ets, planificado, deseado, aceptado, inicio, sg, pub, tab, privada, gp, complicaciones, inductores, toxoide, general, fc, fr, pa, tem, t, p1, imc, mamas, cardio_pulmonar, abdomen, genitales, tacto, especulo, extremidades, neurologico, diagnostico_admision, comentarios,
-                  cfecha1, rn1, g_mf1, pam1, tan1,
-                  cfecha2, rn2, g_mf2, pam2, tan2,
-                  cfecha3, rn3, g_mf3, pam3, tan3,
-                  cfecha4, rn4, g_mf4, pam4, tan4,
-                  cfecha5, rn5, g_mf5, pam5, tan5,
-                  tipiaje, hiv, vdrl, toxo_test, tp, tpt, wbc, linf, gran, hb, hct, plt, glicemia, urea, creat, bil_total, ldh, tgo, tgp,
-                  color1, aspecto1, densidad1, leucocitos1, hematies1, proteinas1, otros1,
-                  color2, aspecto2, densidad2, leucocitos2, hematies2, proteinas2, otros2,
-                  color3, aspecto3, densidad3, leucocitos3, hematies3, proteinas3, otros3,
-                  color4, aspecto4, densidad4, leucocitos4, hematies4, proteinas4, otros4,
-                  fecha_edad_gestacional1, extrapolado_para1,
-                  fecha_edad_gestacional2, extrapolado_para2,
-                  fecha_edad_gestacional3, extrapolado_para3,
-                  fecha_edad_gestacional4, extrapolado_para4,
-                  fecha_edad_gestacional5, extrapolado_para5,
-                  diametro, estrecho_superior, estrecho_medio, estrecho_inferior,
-                  fecha_actual, hora_actual))
+            if paciente_existe:
+                # Actualizar los datos del paciente en la tabla pacientes
+                sql_pacientes = """
+                    UPDATE pacientes SET primer_nombre=%s, segundo_nombre=%s, primer_apellido=%s, segundo_apellido=%s, 
+                    fecha_nacimiento=%s, telefono=%s, genero=%s, estado_civil=%s, nacionalidad=%s, 
+                    lugar_nacimiento=%s, profesion_ocupacion=%s, nombre_apellido_emergencia=%s, 
+                    telefono_emergencia=%s, parentesco=%s, direccion=%s
+                    WHERE cedula=%s
+                """
+                values_pacientes = (primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, fecha_nacimiento, telefono, genero, estado_civil, nacionalidad, lugar_nacimiento, profesion_ocupacion, nombre_apellido_emergencia, telefono_emergencia, parentesco, direccion, cedula)
+                cursor.execute(sql_pacientes, values_pacientes)
+            else:
+                # Insertar datos en la tabla pacientes
+                sql_pacientes = """
+                    INSERT INTO pacientes (cedula, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, fecha_nacimiento, telefono, genero, estado_civil, nacionalidad, lugar_nacimiento, profesion_ocupacion, nombre_apellido_emergencia, telefono_emergencia, parentesco, direccion)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                """
+                values_pacientes = (cedula, primer_nombre, segundo_nombre, primer_apellido, segundo_apellido, fecha_nacimiento, telefono, genero, estado_civil, nacionalidad, lugar_nacimiento, profesion_ocupacion, nombre_apellido_emergencia, telefono_emergencia, parentesco, direccion)
+                cursor.execute(sql_pacientes, values_pacientes)
+
+            # Verificar si la consulta ginecológica ya existe
+            cursor.execute("SELECT paciente_cedula FROM consultaginecologica WHERE paciente_cedula = %s", (cedula,))
+            consulta_existe = cursor.fetchone()
+
+            if consulta_existe:
+                # Actualizar los datos en la tabla consultaginecologica
+                sql_consulta = """
+                    UPDATE consultaginecologica SET g=%s, p=%s, a=%s, e=%s, m=%s, fur=%s, fpp=%s, motivo_consulta=%s, 
+                    enfermedad_actual=%s, antecedentes_personales=%s, antecedentes_familiares=%s, menarquia=%s, 
+                    ciclo=%s, tipo=%s, prs=%s, ps=%s, menopausia=%s, anticonceptivo=%s, ets=%s, planificado=%s, 
+                    deseado=%s, aceptado=%s, inicio=%s, sg=%s, pub=%s, tab=%s, privada=%s, gp=%s, complicaciones=%s, 
+                    inductores=%s, toxoide=%s, general=%s, fc=%s, fr=%s, pa=%s, tem=%s, t=%s, p1=%s, imc=%s, 
+                    mamas=%s, cardio_pulmonar=%s, abdomen=%s, genitales=%s, tacto=%s, especulo=%s, extremidades=%s, 
+                    neurologico=%s, diagnostico_ingreso=%s, comentarios=%s,
+                    1cfecha=%s, 1rn=%s, 1g_mf=%s, 1pam=%s, 1tan=%s,
+                    2cfecha=%s, 2rn=%s, 2g_mf=%s, 2pam=%s, 2tan=%s,
+                    3cfecha=%s, 3rn=%s, 3g_mf=%s, 3pam=%s, 3tan=%s,
+                    4cfecha=%s, 4rn=%s, 4g_mf=%s, 4pam=%s, 4tan=%s,
+                    5cfecha=%s, 5rn=%s, 5g_mf=%s, 5pam=%s, 5tan=%s,
+                    tipiaje=%s, hiv=%s, vdrl=%s, toxo_test=%s, tp=%s, tpt=%s, wbc=%s, linf=%s, gran=%s, hb=%s, hct=%s, plt=%s, glicemia=%s, urea=%s, creat=%s, bil_total=%s, ldh=%s, tgo=%s, tgp=%s,
+                    1color=%s, 1aspecto=%s, 1densidad=%s, 1leucocitos=%s, 1hematies=%s, 1proteinas=%s, 1otros=%s,
+                    2color=%s, 2aspecto=%s, 2densidad=%s, 2leucocitos=%s, 2hematies=%s, 2proteinas=%s, 2otros=%s,
+                    3color=%s, 3aspecto=%s, 3densidad=%s, 3leucocitos=%s, 3hematies=%s, 3proteinas=%s, 3otros=%s,
+                    4color=%s, 4aspecto=%s, 4densidad=%s, 4leucocitos=%s, 4hematies=%s, 4proteinas=%s, 4otros=%s,
+                    1fecha_edad_gestacional=%s, 1extrapolado_para=%s,
+                    2fecha_edad_gestacional=%s, 2extrapolado_para=%s,
+                    3fecha_edad_gestacional=%s, 3extrapolado_para=%s,
+                    4fecha_edad_gestacional=%s, 4extrapolado_para=%s,
+                    5fecha_edad_gestacional=%s, 5extrapolado_para=%s,
+                    diametro=%s, estrecho_superior=%s, estrecho_medio=%s, estrecho_inferior=%s,
+                    fecha=%s, hora=%s
+                    WHERE paciente_cedula=%s
+                """
+                values_consulta = (g, p, a, e, m, fur, fpp, motivo_consulta, enfermedad_actual, antecedentes_personales, antecedentes_familiares, menarquia, ciclo, tipo, prs, ps, menopausia, anticonceptivo, ets, planificado, deseado, aceptado, inicio, sg, pub, tab, privada, gp, complicaciones, inductores, toxoide, general, fc, fr, pa, tem, t, p1, imc, mamas, cardio_pulmonar, abdomen, genitales, tacto, especulo, extremidades, neurologico, diagnostico_admision, comentarios,
+                                  cfecha1, rn1, g_mf1, pam1, tan1,
+                                  cfecha2, rn2, g_mf2, pam2, tan2,
+                                  cfecha3, rn3, g_mf3, pam3, tan3,
+                                  cfecha4, rn4, g_mf4, pam4, tan4,
+                                  cfecha5, rn5, g_mf5, pam5, tan5,
+                                  tipiaje, hiv, vdrl, toxo_test, tp, tpt, wbc, linf, gran, hb, hct, plt, glicemia, urea, creat, bil_total, ldh, tgo, tgp,
+                                  color1, aspecto1, densidad1, leucocitos1, hematies1, proteinas1, otros1,
+                                  color2, aspecto2, densidad2, leucocitos2, hematies2, proteinas2, otros2,
+                                  color3, aspecto3, densidad3, leucocitos3, hematies3, proteinas3, otros3,
+                                  color4, aspecto4, densidad4, leucocitos4, hematies4, proteinas4, otros4,
+                                  fecha_edad_gestacional1, extrapolado_para1,
+                                  fecha_edad_gestacional2, extrapolado_para2,
+                                  fecha_edad_gestacional3, extrapolado_para3,
+                                  fecha_edad_gestacional4, extrapolado_para4,
+                                  fecha_edad_gestacional5, extrapolado_para5,
+                                  diametro, estrecho_superior, estrecho_medio, estrecho_inferior,
+                                  fecha_actual, hora_actual, cedula)
+                cursor.execute(sql_consulta, values_consulta)
+            else:
+                # Insertar datos en la tabla consultaginecologica
+                sql_consulta = """
+                    INSERT INTO consultaginecologica (paciente_cedula, g, p, a, e, m, fur, fpp, motivo_consulta, enfermedad_actual, antecedentes_personales, antecedentes_familiares, menarquia, ciclo, tipo, prs, ps, menopausia, anticonceptivo, ets, planificado, deseado, aceptado, inicio, sg, pub, tab, privada, gp, complicaciones, inductores, toxoide, general, fc, fr, pa, tem, t, p1, imc, mamas, cardio_pulmonar, abdomen, genitales, tacto, especulo, extremidades, neurologico, diagnostico_ingreso, comentarios,
+                        1cfecha, 1rn, 1g_mf, 1pam, 1tan,
+                        2cfecha, 2rn, 2g_mf, 2pam, 2tan,
+                        3cfecha, 3rn, 3g_mf, 3pam, 3tan,
+                        4cfecha, 4rn, 4g_mf, 4pam, 4tan,
+                        5cfecha, 5rn, 5g_mf, 5pam, 5tan,
+                        tipiaje, hiv, vdrl, toxo_test, tp, tpt, wbc, linf, gran, hb, hct, plt, glicemia, urea, creat, bil_total, ldh, tgo, tgp,
+                        1color, 1aspecto, 1densidad, 1leucocitos, 1hematies, 1proteinas, 1otros,
+                        2color, 2aspecto, 2densidad, 2leucocitos, 2hematies, 2proteinas, 2otros,
+                        3color, 3aspecto, 3densidad, 3leucocitos, 3hematies, 3proteinas, 3otros,
+                        4color, 4aspecto, 4densidad, 4leucocitos, 4hematies, 4proteinas, 4otros,
+                        1fecha_edad_gestacional, 1extrapolado_para,
+                        2fecha_edad_gestacional, 2extrapolado_para,
+                        3fecha_edad_gestacional, 3extrapolado_para,
+                        4fecha_edad_gestacional, 4extrapolado_para,
+                        5fecha_edad_gestacional, 5extrapolado_para,
+                        diametro, estrecho_superior, estrecho_medio, estrecho_inferior,
+                        fecha, hora)
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                           %s, %s, %s, %s, %s,
+                           %s, %s, %s, %s, %s,
+                           %s, %s, %s, %s, %s,
+                           %s, %s, %s, %s, %s,
+                           %s, %s, %s, %s, %s,
+                           %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                           %s, %s, %s, %s, %s, %s, %s,
+                           %s, %s, %s, %s, %s, %s, %s,
+                           %s, %s, %s, %s, %s, %s, %s,
+                           %s, %s, %s, %s, %s, %s, %s,
+                           %s, %s,
+                           %s, %s,
+                           %s, %s,
+                           %s, %s,
+                           %s, %s,
+                           %s, %s, %s, %s, %s, %s)
+                """
+                values_consulta = (cedula, g, p, a, e, m, fur, fpp, motivo_consulta, enfermedad_actual, antecedentes_personales, antecedentes_familiares, menarquia, ciclo, tipo, prs, ps, menopausia, anticonceptivo, ets, planificado, deseado, aceptado, inicio, sg, pub, tab, privada, gp, complicaciones, inductores, toxoide, general, fc, fr, pa, tem, t, p1, imc, mamas, cardio_pulmonar, abdomen, genitales, tacto, especulo, extremidades, neurologico, diagnostico_admision, comentarios,
+                                  cfecha1, rn1, g_mf1, pam1, tan1,
+                                  cfecha2, rn2, g_mf2, pam2, tan2,
+                                  cfecha3, rn3, g_mf3, pam3, tan3,
+                                  cfecha4, rn4, g_mf4, pam4, tan4,
+                                  cfecha5, rn5, g_mf5, pam5, tan5,
+                                  tipiaje, hiv, vdrl, toxo_test, tp, tpt, wbc, linf, gran, hb, hct, plt, glicemia, urea, creat, bil_total, ldh, tgo, tgp,
+                                  color1, aspecto1, densidad1, leucocitos1, hematies1, proteinas1, otros1,
+                                  color2, aspecto2, densidad2, leucocitos2, hematies2, proteinas2, otros2,
+                                  color3, aspecto3, densidad3, leucocitos3, hematies3, proteinas3, otros3,
+                                  color4, aspecto4, densidad4, leucocitos4, hematies4, proteinas4, otros4,
+                                  fecha_edad_gestacional1, extrapolado_para1,
+                                  fecha_edad_gestacional2, extrapolado_para2,
+                                  fecha_edad_gestacional3, extrapolado_para3,
+                                  fecha_edad_gestacional4, extrapolado_para4,
+                                  fecha_edad_gestacional5, extrapolado_para5,
+                                  diametro, estrecho_superior, estrecho_medio, estrecho_inferior,
+                                  fecha_actual, hora_actual)
+
+                cursor.execute(sql_consulta, values_consulta)
 
             # Confirmar la transacción
             connection.commit()
             QMessageBox.information(self, "Éxito", "Datos guardados exitosamente.")
             self.clear_all_fields()  # Limpiar los campos después de guardar
+
         except Exception as e:
             print(f"Error al guardar los datos: {e}")
             connection.rollback()

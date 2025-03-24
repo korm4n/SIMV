@@ -638,7 +638,7 @@ class ConsultaGeneral(QWidget):
         self.estado_actual_entry.setCurrentIndex(0)
         self.autopsia_entry.setCurrentIndex(0)
         self.fecha_alta_entry.setDate(QDate.currentDate())
-        self.hora_alta_entry.clear()
+        self.hora_alta_entry.setText(QTime.currentTime().toString("HH:mm:ss"))
 
     def save_data(self):
         # Verificar que el campo estado_actual esté seleccionado
